@@ -6,9 +6,6 @@
 //
 
 #import "WorkManageItemView.h"
-@interface WorkManageItemView ()
-@property (nonatomic, strong) UILabel *nameLb;
-@end
 @implementation WorkManageItemView
 
 - (instancetype)init
@@ -27,7 +24,7 @@
     {
         _nameLb = [UILabel labelWithText:@"工单数据统计"
                                     font:[UIFont boldSystemFontOfSize:16]
-                               textColor:nil
+                               textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentLeft];
     }
     return _nameLb;

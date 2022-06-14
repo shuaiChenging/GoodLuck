@@ -165,6 +165,10 @@
 - (void)applyWorkPlace
 {
     ApplyWorkPlaceVC *applyWork = [ApplyWorkPlaceVC new];
+    WeakSelf(self)
+    [applyWork.subject subscribeNext:^(id  _Nullable x) {
+        [weakself loadData];
+    }];
     [self.navigationController pushViewController:applyWork animated:YES];
 }
 

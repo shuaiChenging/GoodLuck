@@ -71,4 +71,28 @@
 /// 申请工地
 #define projectapply @"/customer/project/apply"
 
+/// 获取该工地老板的工地列表
+#define bosslist @"/customer/project/phone/boss/list"
+
+/// 根据手机号检索工地老板
+#define listbyphone @"/customer/tenant/listByPhone"
+
+/// 申请工地
+#define projectapply @"/customer/project/apply"
+
+/// 增加工地
+#define projectsave @"/customer/project/save"
+
+/// 当前上班管理员
+#define onworklist @"/customer/work/onWorkList"
+
+/// 人员管理-删除管理员
+#define deleteadmin @"/customer/project/delete/admin"
+
+/// 工地老板-角色审批-申请列表
+#define listapply @"/customer/project/list/apply"
+
+/// 工单数据统计
+#define orderstatistics @"/customer/worker/order/statistics"
+
 #endif /* UrlDefine_h */

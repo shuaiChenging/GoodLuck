@@ -60,7 +60,7 @@
     {
         UILabel *label = [UILabel labelWithText:array[i]
                                            font:[UIFont systemFontOfSize:14]
-                                      textColor:nil
+                                      textColor:[UIColor blackColor]
                                       alignment:NSTextAlignmentCenter];
         label.userInteractionEnabled = YES;
         __weak typeof(self) weakSelf = self;

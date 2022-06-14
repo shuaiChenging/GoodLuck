@@ -31,7 +31,7 @@
     {
         _titleLb = [UILabel labelWithText:@"手机登录好运来"
                                      font:[UIFont boldSystemFontOfSize:24]
-                                textColor:nil
+                                textColor:[UIColor blackColor]
                                 alignment:NSTextAlignmentLeft];
     }
     return _titleLb;
@@ -43,7 +43,7 @@
     {
         _registLb = [UILabel labelWithText:@"用户注册"
                                       font:[UIFont systemFontOfSize:16]
-                                 textColor:nil
+                                 textColor:[UIColor blackColor]
                                  alignment:NSTextAlignmentLeft];
         _registLb.userInteractionEnabled = YES;
     }
@@ -56,7 +56,7 @@
     {
         _accountLoginLb = [UILabel labelWithText:@"账号密码登录"
                                             font:[UIFont systemFontOfSize:16]
-                                       textColor:nil
+                                       textColor:[UIColor blackColor]
                                        alignment:NSTextAlignmentLeft];
         _accountLoginLb.userInteractionEnabled = YES;
     }

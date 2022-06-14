@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RoleApproveVC : BaseVC
-
+@property (nonatomic, copy) NSString *projectId;
 @end
 
 NS_ASSUME_NONNULL_END

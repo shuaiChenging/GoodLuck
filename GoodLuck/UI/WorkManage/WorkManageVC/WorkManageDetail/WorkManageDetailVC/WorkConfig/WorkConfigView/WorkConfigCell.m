@@ -35,7 +35,7 @@
     {
         _nameLb = [UILabel labelWithText:@"账号与安全"
                                     font:[UIFont systemFontOfSize:15]
-                               textColor:nil
+                               textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentLeft];
     }
     return _nameLb;

@@ -28,7 +28,7 @@
     {
         _timeLb = [UILabel labelWithText:@"2022.05.19(24小时)"
                                     font:[UIFont systemFontOfSize:14]
-                               textColor:nil
+                               textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentCenter];
     }
     return _timeLb;

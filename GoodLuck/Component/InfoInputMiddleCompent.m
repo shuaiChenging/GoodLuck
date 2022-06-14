@@ -8,7 +8,6 @@
 #import "InfoInputMiddleCompent.h"
 @interface InfoInputMiddleCompent ()
 @property (nonatomic, strong) UILabel *nameLb;
-@property (nonatomic, strong) UITextField *textField;
 @end
 @implementation InfoInputMiddleCompent
 
@@ -51,7 +50,7 @@
     {
         _nameLb = [UILabel labelWithText:@""
                                     font:[UIFont systemFontOfSize:15]
-                               textColor:nil
+                               textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentLeft];
     }
     return _nameLb;

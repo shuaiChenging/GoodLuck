@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface InfoInputMiddleCompent : UIView
 @property (nonatomic, strong) UIImageView *rightImg;
+@property (nonatomic, strong) UITextField *textField;
 - (void)setName:(NSString *)name
     placeholder:(NSString *)placehodler
       imageName:(nullable NSString *)imageName;

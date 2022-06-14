@@ -25,7 +25,7 @@
     {
         _phoneLoginLb = [UILabel labelWithText:@"已有账户，立即登录"
                                           font:[UIFont systemFontOfSize:16]
-                                     textColor:nil
+                                     textColor:[UIColor blackColor]
                                      alignment:NSTextAlignmentLeft];
         _phoneLoginLb.userInteractionEnabled = YES;
     }

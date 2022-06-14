@@ -155,7 +155,7 @@
     
     UILabel *workListLb = [UILabel labelWithText:@"工地项目列表"
                                             font:[UIFont boldSystemFontOfSize:18]
-                                       textColor:nil
+                                       textColor:[UIColor blackColor]
                                        alignment:NSTextAlignmentLeft];
     [self addSubview:workListLb];
     [workListLb mas_makeConstraints:^(MASConstraintMaker *make) {

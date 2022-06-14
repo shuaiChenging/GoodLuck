@@ -14,4 +14,7 @@ target 'GoodLuck' do
   pod 'ReactiveObjC'
   pod 'MJExtension'
   pod 'PPGetAddressBook'
+#  pod 'AMap3DMap'
+#  pod 'AMapSearch'
+#  pod 'AMapLocation'
 end

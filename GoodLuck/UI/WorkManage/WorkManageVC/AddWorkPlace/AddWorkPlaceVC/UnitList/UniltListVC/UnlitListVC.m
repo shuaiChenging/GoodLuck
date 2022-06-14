@@ -23,6 +23,15 @@
     [self getData];
 }
 
+- (RACSubject *)subject
+{
+    if (!_subject)
+    {
+        _subject = [RACSubject new];
+    }
+    return _subject;
+}
+
 - (UITableView *)tableView
 {
     if (!_tableView)
@@ -84,6 +93,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CompanyListResponse *response = self.soucrs[indexPath.row];
+    [self.subject sendNext:response];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

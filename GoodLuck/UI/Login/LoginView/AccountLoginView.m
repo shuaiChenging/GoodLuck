@@ -25,7 +25,7 @@
     {
         _phoneLoginLb = [UILabel labelWithText:@"手机快捷登录"
                                           font:[UIFont systemFontOfSize:16]
-                                     textColor:nil
+                                     textColor:[UIColor blackColor]
                                      alignment:NSTextAlignmentLeft];
         _phoneLoginLb.userInteractionEnabled = YES;
     }
@@ -37,7 +37,7 @@
     if (!_accountTF)
     {
         _accountTF = [[DLTextFeild alloc] initWithType:UserInput];
-        _accountTF.textField.text = @"15995754057";
+        _accountTF.textField.text = @"15952414057";
     }
     return _accountTF;
 }

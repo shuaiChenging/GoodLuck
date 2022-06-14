@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UnlitListVC : BaseVC
-
+@property (nonatomic, strong) RACSubject *subject;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -10,8 +10,14 @@
 #import "InfoInputCountCompent.h"
 #import "InfoSeletedCompent.h"
 #import "UnlitListVC.h"
+#import "CompanyListResponse.h"
+#import "WorkDetailResponse.h"
 @interface AddWorkPlaceVC ()
-
+@property (nonatomic, strong) InfoSeletedCompent *companyAddress;
+@property (nonatomic, strong) CompanyListResponse *response;
+@property (nonatomic, strong) InfoInputRightCompent *projectName;
+@property (nonatomic, strong) InfoSeletedCompent *projectAddress;
+@property (nonatomic, strong) InfoInputCountCompent *detailAddress;
 @end
 
 @implementation AddWorkPlaceVC
@@ -21,6 +27,46 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
     [self customerUI];
+}
+
+- (InfoInputCountCompent *)detailAddress
+{
+    if (!_detailAddress)
+    {
+        _detailAddress = [InfoInputCountCompent new];
+        [_detailAddress setName:@"详细地址" placeholder:@"请输入详细地址"];
+    }
+    return _detailAddress;
+}
+
+- (InfoSeletedCompent *)projectAddress
+{
+    if (!_projectAddress)
+    {
+        _projectAddress = [InfoSeletedCompent new];
+        [_projectAddress setName:@"项目地址" info:@"" defaultInfo:@"请输入项目地址"];
+    }
+    return _projectAddress;
+}
+
+- (InfoSeletedCompent *)companyAddress
+{
+    if (!_companyAddress)
+    {
+        _companyAddress = [InfoSeletedCompent new];
+        [_companyAddress setName:@"土方单位" info:@"" defaultInfo:@"请输入土方单位"];
+    }
+    return _companyAddress;
+}
+
+- (InfoInputRightCompent *)projectName
+{
+    if (!_projectName)
+    {
+        _projectName = [InfoInputRightCompent new];
+        [_projectName setName:@"项目名称" placeholder:@"请输入项目名称"];
+    }
+    return _projectName;
 }
 
 - (void)customerUI
@@ -42,10 +88,8 @@
         make.centerY.equalTo(baseView);
     }];
     
-    InfoInputRightCompent *projectName = [InfoInputRightCompent new];
-    [projectName setName:@"项目名称" placeholder:@"请输入项目名称"];
-    [self.view addSubview:projectName];
-    [projectName mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.projectName];
+    [_projectName mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(46);
         make.top.equalTo(baseView.mas_bottom);
         make.left.right.equalTo(self.view);
@@ -57,18 +101,15 @@
     [firstLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
         make.left.right.equalTo(self.view);
-        make.top.equalTo(projectName.mas_bottom);
+        make.top.equalTo(self.projectName.mas_bottom);
     }];
     
     WeakSelf(self)
-    
-    InfoSeletedCompent *projectAddress = [InfoSeletedCompent new];
-    [projectAddress setName:@"项目地址" info:@"浙江省西湖区"];
-    [projectAddress jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+    [self.projectAddress jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
         NSLog(@"来了，老弟");
     }];
-    [self.view addSubview:projectAddress];
-    [projectAddress mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.projectAddress];
+    [_projectAddress mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(46);
         make.top.equalTo(firstLine.mas_bottom);
         make.left.right.equalTo(self.view);
@@ -80,13 +121,11 @@
     [secondLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
         make.left.right.equalTo(self.view);
-        make.top.equalTo(projectAddress.mas_bottom);
+        make.top.equalTo(self.projectAddress.mas_bottom);
     }];
     
-    InfoInputCountCompent *detailAddress = [InfoInputCountCompent new];
-    [detailAddress setName:@"详细地址" placeholder:@"请输入详细地址"];
-    [self.view addSubview:detailAddress];
-    [detailAddress mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.detailAddress];
+    [_detailAddress mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(56);
         make.top.equalTo(secondLine.mas_bottom);
         make.left.right.equalTo(self.view);
@@ -98,16 +137,14 @@
     [thirdLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
         make.left.right.equalTo(self.view);
-        make.top.equalTo(detailAddress.mas_bottom);
+        make.top.equalTo(self.detailAddress.mas_bottom);
     }];
     
-    InfoSeletedCompent *companyAddress = [InfoSeletedCompent new];
-    [companyAddress setName:@"土方单位" info:@"浙江省西湖区"];
-    [companyAddress jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+    [self.companyAddress jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
         [weakself showUnlitListVC];
     }];
-    [self.view addSubview:companyAddress];
-    [companyAddress mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:_companyAddress];
+    [_companyAddress mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(46);
         make.top.equalTo(thirdLine.mas_bottom);
         make.left.right.equalTo(self.view);
@@ -119,10 +156,13 @@
     [fourthLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
         make.left.right.equalTo(self.view);
-        make.top.equalTo(companyAddress.mas_bottom);
+        make.top.equalTo(self.companyAddress.mas_bottom);
     }];
     
     UIButton *button = [UIButton new];
+    [[button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+        [weakself addWorkPlace];
+    }];
     [button.titleLabel setFont:[UIFont systemFontOfSize:16]];
     [button setTitle:@"保存" forState:UIControlStateNormal];
     button.layer.cornerRadius = 5;
@@ -136,9 +176,62 @@
     }];
 }
 
+- (void)addWorkPlace
+{
+    PostRequest *request = [[PostRequest alloc] initWithRequestUrl:projectsave argument:@{@"address":@"江苏省",
+                                                                                          @"city":@"苏州市",
+                                                                                          @"companyId":@"district",
+                                                                                          @"district":@"district",
+                                                                                          @"latitude":@"district",
+                                                                                          @"name":@"district",
+                                                                                          @"province":@"district"}];
+    WeakSelf(self)
+    [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            
+        }
+        
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+        
+    }];
+}
+
+- (void)loadViewWithProjectId:(NSString *)projectId
+{
+    WeakSelf(self)
+    GetRequest *request = [[GetRequest alloc] initWithRequestUrl:projectdetails argument:@{@"id":projectId}];
+    [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            WorkDetailResponse *response = [WorkDetailResponse mj_objectWithKeyValues:result[@"data"]];
+            [weakself handleData:response];
+        }
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+        
+    }];
+}
+
+- (void)handleData:(WorkDetailResponse *)response
+{
+    self.projectName.textField.text = response.name;
+    self.projectAddress.infoLb.text = [NSString stringWithFormat:@"%@%@%@",response.province,response.city,response.district];
+    self.projectAddress.infoLb.textColor = [UIColor blackColor];
+    
+    self.detailAddress.textField.text = response.address;
+    self.companyAddress.infoLb.text = response.companyName;
+    self.companyAddress.infoLb.textColor = [UIColor blackColor];
+}
+
 - (void)showUnlitListVC
 {
     UnlitListVC *unlitListVC = [UnlitListVC new];
+    WeakSelf(self)
+    [unlitListVC.subject subscribeNext:^(id  _Nullable x) {
+        weakself.response = (CompanyListResponse *)x;
+        weakself.companyAddress.infoLb.text = weakself.response.name;
+        weakself.companyAddress.infoLb.textColor = [UIColor blackColor];
+    }];
     [self presentViewController:unlitListVC animated:YES completion:nil];
 }
 

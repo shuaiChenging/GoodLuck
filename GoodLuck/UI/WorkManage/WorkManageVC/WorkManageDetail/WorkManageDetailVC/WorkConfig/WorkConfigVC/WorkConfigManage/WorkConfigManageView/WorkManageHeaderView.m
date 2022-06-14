@@ -24,7 +24,7 @@
     {
         _nameLb = [UILabel labelWithText:@"车队名称"
                                    font:[UIFont boldSystemFontOfSize:15]
-                              textColor:nil
+                              textColor:[UIColor blackColor]
                               alignment:NSTextAlignmentLeft];
     }
     return _nameLb;

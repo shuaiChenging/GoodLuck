@@ -43,7 +43,7 @@
     {
         _nameLb = [UILabel labelWithText:@""
                                     font:[UIFont systemFontOfSize:15]
-                               textColor:nil
+                               textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentLeft];
     }
     return _nameLb;
@@ -53,9 +53,9 @@
 {
     if (!_numberLb)
     {
-        _numberLb = [UILabel labelWithText:@"4/50"
+        _numberLb = [UILabel labelWithText:@"0/50"
                                       font:[UIFont systemFontOfSize:14]
-                                 textColor:nil
+                                 textColor:[UIColor blackColor]
                                  alignment:NSTextAlignmentRight];
     }
     return _numberLb;
@@ -70,6 +70,18 @@
     }];
     
     [self addSubview:self.textField];
+    WeakSelf(self)
+    [[_textField rac_textSignal] subscribeNext:^(NSString * _Nullable x) {
+        if (x.length > 50)
+        {
+            x = [weakself.textField.text substringToIndex: 50];
+            weakself.textField.text = x;
+        }
+        else
+        {
+            self.numberLb.text = [NSString stringWithFormat:@"%lu/50",(unsigned long)x.length];
+        }
+    }];
     [_textField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(100);
         make.right.equalTo(self).offset(-16);

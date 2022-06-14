@@ -19,6 +19,7 @@
 {
     [super viewDidLoad];
     self.title = @"个人中心";
+    self.navigationItem.leftBarButtonItem = nil;
     self.source = @[@[@"账号与安全"],
                     @[@"设备配置",@"清除缓存"],
                     @[@"版本更新",@"推荐给朋友",@"关于好运来"]];

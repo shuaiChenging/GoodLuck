@@ -35,7 +35,7 @@
     {
         _contentLb = [UILabel labelWithText:@""
                                        font:[UIFont systemFontOfSize:14]
-                                  textColor:nil
+                                  textColor:[UIColor blackColor]
                                   alignment:NSTextAlignmentLeft];
     }
     return _contentLb;

@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface InfoSeletedCompent : UIView
 @property (nonatomic, strong) UILabel *infoLb;
-- (void)setName:(NSString *)name info:(NSString *)info;
+- (void)setName:(NSString *)name info:(NSString *)info defaultInfo:(NSString *)defaultInfo;
 @end
 
 NS_ASSUME_NONNULL_END

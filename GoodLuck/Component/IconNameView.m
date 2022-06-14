@@ -38,7 +38,7 @@
     {
         _label = [UILabel labelWithText:@"详细信息"
                                    font:[UIFont systemFontOfSize:12]
-                              textColor:nil
+                              textColor:[UIColor blackColor]
                               alignment:NSTextAlignmentCenter];
     }
     return _label;

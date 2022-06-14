@@ -24,6 +24,7 @@
 - (void)customerUI
 {
     WorkManageItemView *workManggeItemView = [WorkManageItemView new];
+    workManggeItemView.nameLb.text = @"工地数据统计";
     [self addSubview:workManggeItemView];
     [workManggeItemView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self);

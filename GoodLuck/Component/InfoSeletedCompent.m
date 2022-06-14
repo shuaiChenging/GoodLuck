@@ -28,7 +28,7 @@
     {
         _nameLb = [UILabel labelWithText:@""
                                     font:[UIFont systemFontOfSize:15]
-                               textColor:nil
+                               textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentLeft];
     }
     return _nameLb;
@@ -40,7 +40,7 @@
     {
         _infoLb = [UILabel labelWithText:@""
                                     font:[UIFont systemFontOfSize:15]
-                               textColor:nil
+                               textColor:[UIColor jk_colorWithHexString:@"#cccccc"]
                                alignment:NSTextAlignmentRight];
     }
     return _infoLb;
@@ -71,10 +71,16 @@
     }];
 }
 
-- (void)setName:(NSString *)name info:(NSString *)info
+- (void)setName:(NSString *)name info:(NSString *)info defaultInfo:(NSString *)defaultInfo
 {
     self.nameLb.text = name;
-    self.infoLb.text = info;
+    self.infoLb.text = defaultInfo;
+    if (![Tools isEmpty:info])
+    {
+        self.infoLb.text = info;
+        self.infoLb.textColor = [UIColor blackColor];
+    }
+    
 }
 
 @end

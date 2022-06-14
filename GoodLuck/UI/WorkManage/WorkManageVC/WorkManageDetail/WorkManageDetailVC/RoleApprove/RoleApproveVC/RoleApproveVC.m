@@ -18,6 +18,20 @@
     [super viewDidLoad];
     self.title = @"角色审批";
     [self customerUI];
+    [self getData];
+}
+
+- (void)getData
+{
+    GetRequest *request = [[GetRequest alloc] initWithRequestUrl:listapply argument:@{@"projectId":self.projectId,@"role":@"BOSS"}];
+    [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            
+        }
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+        
+    }];
 }
 
 - (void)customerUI

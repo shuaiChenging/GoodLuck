@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MemberManageResponse : BaseResponse
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *phone;
 @property (nonatomic, copy) NSString *nameId;
 @end
 

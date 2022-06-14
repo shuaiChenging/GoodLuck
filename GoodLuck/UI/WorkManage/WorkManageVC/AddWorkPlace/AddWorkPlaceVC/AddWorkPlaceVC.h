@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AddWorkPlaceVC : BaseVC
-
+- (void)loadViewWithProjectId:(NSString *)projectId;
 @end
 
 NS_ASSUME_NONNULL_END

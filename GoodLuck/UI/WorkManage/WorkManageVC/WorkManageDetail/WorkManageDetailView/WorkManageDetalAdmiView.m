@@ -54,7 +54,7 @@
     {
         _offficeStateLb = [UILabel labelWithText:@"白班"
                                             font:[UIFont systemFontOfSize:12]
-                                       textColor:nil
+                                       textColor:[UIColor blackColor]
                                        alignment:NSTextAlignmentLeft];
     }
     return _offficeStateLb;
@@ -72,7 +72,7 @@
     
     UILabel *printState = [UILabel labelWithText:@"打印机状态:"
                                             font:[UIFont systemFontOfSize:12]
-                                       textColor:nil
+                                       textColor:[UIColor blackColor]
                                        alignment:NSTextAlignmentLeft];
     [self addSubview:printState];
     [printState mas_makeConstraints:^(MASConstraintMaker *make) {

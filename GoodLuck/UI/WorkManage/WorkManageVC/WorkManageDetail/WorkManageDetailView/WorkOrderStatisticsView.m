@@ -12,6 +12,7 @@
 @interface WorkOrderStatisticsView ()
 @property (nonatomic, strong) TimeShowView *timeShowView;
 @property (nonatomic, strong) NSArray *array;
+@property (nonatomic, strong) NSMutableArray *wokInfoViews;
 @end
 @implementation WorkOrderStatisticsView
 
@@ -21,6 +22,7 @@
     if (self)
     {
         self.backgroundColor = [UIColor whiteColor];
+        self.wokInfoViews = [NSMutableArray arrayWithCapacity:0];
         self.array = @[@{@"number":@"1",@"name":@"全部工单数"},
                        @{@"number":@"1",@"name":@"渣土场工单"},
                        @{@"number":@"1",@"name":@"自倒工单"},
@@ -70,6 +72,7 @@
         infoView.numberLb.text = self.array[i][@"number"];
         infoView.itemLb.text = self.array[i][@"name"];
         [scrollView addSubview:infoView];
+        [self.wokInfoViews addObject:infoView];
         [infoView mas_makeConstraints:^(MASConstraintMaker *make) {
             if (i == 0)
             {
@@ -93,6 +96,48 @@
     }
     
     
+}
+
+- (void)loadOrderWithModel:(WorkOrderResponse *)response
+{
+    for (int i = 0; i < self.wokInfoViews.count; i++)
+    {
+        WorkInfoView *infoView = self.wokInfoViews[i];
+        switch (i) {
+            case 0:
+            {
+                infoView.numberLb.text = response.allCount;
+                break;
+            }
+            case 1:
+            {
+                infoView.numberLb.text = response.ztcCount;
+                break;
+            }
+            case 2:
+            {
+                infoView.numberLb.text = response.zdCount;
+                break;
+            }
+            case 3:
+            {
+                infoView.numberLb.text = response.exceptionCount;
+                break;
+            }
+            case 4:
+            {
+                infoView.numberLb.text = response.delCount;
+                break;
+            }
+            case 5:
+            {
+                infoView.numberLb.text = response.historyCount;
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 @end

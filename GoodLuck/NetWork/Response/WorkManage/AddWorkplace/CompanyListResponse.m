@@ -8,5 +8,8 @@
 #import "CompanyListResponse.h"
 
 @implementation CompanyListResponse
-
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{@"companyId":@"id"};
+}
 @end

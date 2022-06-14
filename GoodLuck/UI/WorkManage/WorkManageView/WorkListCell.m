@@ -53,7 +53,7 @@
     {
         _addressLb = [UILabel labelWithText:@"嘻嘻印象城"
                                        font:[UIFont systemFontOfSize:16]
-                                  textColor:nil
+                                  textColor:[UIColor blackColor]
                                   alignment:NSTextAlignmentLeft];
     }
     return _addressLb;
@@ -65,7 +65,7 @@
     {
         _workTimeLb = [UILabel labelWithText:@"开工时间：未开工"
                                        font:[UIFont systemFontOfSize:12]
-                                  textColor:nil
+                                  textColor:[UIColor blackColor]
                                   alignment:NSTextAlignmentLeft];
     }
     return _workTimeLb;

@@ -122,7 +122,7 @@
 - (void)addAdmin
 {
     WeakSelf(self)
-    PostRequest *request = [[PostRequest alloc] initWithRequestUrl:projectaddadmin argument:@{@"projectId":self.projectId,@"phone":@"徐志成"}];
+    PostRequest *request = [[PostRequest alloc] initWithRequestUrl:projectaddadmin argument:@{@"projectId":self.projectId,@"phone":@"18506223058"}];
     [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
         if (success)
         {
@@ -200,7 +200,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    ManageResponse *response = self.sources[indexPath.section];
+    MemberManageResponse *model = response.content[indexPath.row];
     ChangeMemberVC *changeMemberVC = [ChangeMemberVC new];
+    changeMemberVC.response = model;
+    changeMemberVC.projectId = self.projectId;
+    WeakSelf(self)
+    [changeMemberVC.subject subscribeNext:^(id  _Nullable x) {
+        [weakself getData];
+    }];
     [self.navigationController pushViewController:changeMemberVC animated:YES];
 }
 

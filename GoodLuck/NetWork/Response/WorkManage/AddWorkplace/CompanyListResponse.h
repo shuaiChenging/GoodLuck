@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CompanyListResponse : BaseResponse
+@property (nonatomic, copy) NSString *companyId;
 @property (nonatomic, copy) NSString *name;
 @end
 

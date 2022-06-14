@@ -32,7 +32,7 @@
     {
         _leftLb = [UILabel labelWithText:@""
                                     font:[UIFont systemFontOfSize:14]
-                               textColor:nil
+                               textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentCenter];
         _leftLb.userInteractionEnabled = YES;
         _leftLb.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
@@ -46,7 +46,7 @@
     {
         _rightLb = [UILabel labelWithText:@""
                                      font:[UIFont systemFontOfSize:14]
-                                textColor:nil
+                                textColor:[UIColor blackColor]
                                 alignment:NSTextAlignmentCenter];
         _rightLb.userInteractionEnabled = YES;
         _rightLb.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];

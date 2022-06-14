@@ -32,7 +32,7 @@
     {
         _nameLb = [UILabel labelWithText:@"添加车队"
                                     font:[UIFont boldSystemFontOfSize:14]
-                               textColor:nil
+                               textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentCenter];
     }
     return _nameLb;
@@ -96,7 +96,7 @@
     
     UILabel *leftLb = [UILabel labelWithText:@"取消"
                                         font:[UIFont systemFontOfSize:14]
-                                   textColor:nil
+                                   textColor:[UIColor blackColor]
                                    alignment:NSTextAlignmentCenter];
     leftLb.userInteractionEnabled = YES;
     WeakSelf(self)
