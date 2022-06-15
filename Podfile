@@ -16,6 +16,7 @@ target 'GoodLuck' do
   pod 'PPGetAddressBook'
   pod 'PNChart'
   pod 'PDTSimpleCalendar', '~> 0.9.1'
+  pod 'BabyBluetooth','~> 0.7.0'
 #  pod 'AMap3DMap'
 #  pod 'AMapSearch'
 #  pod 'AMapLocation'
