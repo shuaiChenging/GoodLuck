@@ -14,6 +14,8 @@ target 'GoodLuck' do
   pod 'ReactiveObjC'
   pod 'MJExtension'
   pod 'PPGetAddressBook'
+  pod 'PNChart'
+  pod 'PDTSimpleCalendar', '~> 0.9.1'
 #  pod 'AMap3DMap'
 #  pod 'AMapSearch'
 #  pod 'AMapLocation'

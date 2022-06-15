@@ -95,4 +95,16 @@
 /// 工单数据统计
 #define orderstatistics @"/customer/worker/order/statistics"
 
+/// 工地数据统计-车辆
+#define carstatistics @"/customer/worker/order/car/statistics"
+
+/// 工地数据统计-卡牌
+#define cardstatistics @"/customer/worker/order/card/statistics"
+
+/// 功底数据统计-土类型
+#define earthstatistics @"/customer/worker/order/earth/statistics"
+
+/// 工地数据统计-车队
+#define fleetstatistics @"/customer/worker/order/fleet/statistics"
+
 #endif /* UrlDefine_h */

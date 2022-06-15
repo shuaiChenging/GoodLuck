@@ -6,7 +6,7 @@
 //
 
 #import "WorkManageDetailVC.h"
-#import "WorkListCell.h"
+#import "WorkManageCarCell.h"
 #import "WorkManageDetailHeaderView.h"
 #import "AddWorkPlaceVC.h"
 #import "MemberManageVC.h"
@@ -36,6 +36,10 @@
     }
     [self customerUI];
     [self getData];
+    [self getCarRequest];
+//    [self getCardRequest];
+//    [self getEarthRequest];
+//    [self getFleetRequest];
 }
 
 - (void)getData
@@ -153,7 +157,7 @@
         _tableView.tableHeaderView = [self headerView];
         _tableView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        [_tableView registerClass:WorkListCell.class forCellReuseIdentifier:NSStringFromClass(WorkListCell.class)];
+        [_tableView registerClass:WorkManageCarCell.class forCellReuseIdentifier:NSStringFromClass(WorkManageCarCell.class)];
     }
     return _tableView;
 }
@@ -194,11 +198,102 @@
     }];
 }
 
+/// 车辆请求
+- (void)getCarRequest
+{
+    GetRequest *orderRequest = [[GetRequest alloc] initWithRequestUrl:carstatistics
+                                                             argument:@{@"startTime":[Tools getCurrentTime],
+                                                                        @"endTime":[Tools getCurrentTime],
+                                                                        @"projectId":self.response.projectId,
+                                                                        @"role":[LoginInfoManage shareInstance].isBoss ? @"BOSS":@"ADMIN"
+                                                                        }];
+    [orderRequest startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            
+        }
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+        
+    }];
+}
+
+- (UIView *)carHeaderView
+{
+    UIView *view = [UIView new];
+    return view;
+}
+
+/// 卡牌请求
+- (void)getCardRequest
+{
+    GetRequest *orderRequest = [[GetRequest alloc] initWithRequestUrl:cardstatistics
+                                                             argument:@{@"startTime":[Tools getCurrentTime],
+                                                                        @"endTime":[Tools getCurrentTime],
+                                                                        @"projectId":self.response.projectId,
+                                                                        @"role":[LoginInfoManage shareInstance].isBoss ? @"BOSS":@"ADMIN"
+                                                                        }];
+    [orderRequest startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            
+        }
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+        
+    }];
+}
+/// 土类型请求
+- (void)getEarthRequest
+{
+    GetRequest *orderRequest = [[GetRequest alloc] initWithRequestUrl:earthstatistics
+                                                             argument:@{@"startTime":[Tools getCurrentTime],
+                                                                        @"endTime":[Tools getCurrentTime],
+                                                                        @"projectId":self.response.projectId,
+                                                                        @"role":[LoginInfoManage shareInstance].isBoss ? @"BOSS":@"ADMIN"
+                                                                        }];
+    [orderRequest startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            
+        }
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+        
+    }];
+}
+
+/// 获取车队请求
+- (void)getFleetRequest
+{
+    GetRequest *orderRequest = [[GetRequest alloc] initWithRequestUrl:fleetstatistics
+                                                             argument:@{@"startTime":[Tools getCurrentTime],
+                                                                        @"endTime":[Tools getCurrentTime],
+                                                                        @"projectId":self.response.projectId,
+                                                                        @"role":[LoginInfoManage shareInstance].isBoss ? @"BOSS":@"ADMIN"
+                                                                        }];
+    [orderRequest startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            
+        }
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+        
+    }];
+}
+
 #pragma mark - UITableViewDataSource && UITableViewDelegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self carHeaderView];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 60;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 196;
+    return 100;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -208,7 +303,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WorkListCell *cell = [WorkListCell cellWithCollectionView:tableView];
+    WorkManageCarCell *cell = [WorkManageCarCell cellWithCollectionView:tableView];
     return cell;
 }
 @end

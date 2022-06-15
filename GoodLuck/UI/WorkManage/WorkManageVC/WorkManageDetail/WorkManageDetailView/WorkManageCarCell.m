@@ -1,0 +1,165 @@
+//
+//  WorkManageCarCell.m
+//  GoodLuck
+//
+//  Created by 徐志成 on 2022/6/15.
+//
+
+#import "WorkManageCarCell.h"
+@interface WorkManageCarCell ()
+@property (nonatomic, strong) UIImageView *image;
+@property (nonatomic, strong) UILabel *carLb;
+@property (nonatomic, strong) UILabel *allLb;
+@property (nonatomic, strong) UILabel *driveLb;
+@property (nonatomic, strong) UILabel *typeLb;
+@property (nonatomic, strong) UILabel *timeLb;
+@end
+@implementation WorkManageCarCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self)
+    {
+        self.contentView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        [self customerUI];
+    }
+    
+    return self;
+}
+
++ (instancetype)cellWithCollectionView:(UITableView *)tableView
+{
+    WorkManageCarCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(self)];
+    return cell;
+}
+
+- (UIImageView *)image
+{
+    if (!_image)
+    {
+        _image = [UIImageView new];
+        _image.backgroundColor = [UIColor grayColor];
+    }
+    return _image;
+}
+
+- (UILabel *)carLb
+{
+    if (!_carLb)
+    {
+        _carLb = [UILabel labelWithText:@"浙E"
+                                   font:[UIFont boldSystemFontOfSize:16]
+                              textColor:[UIColor blackColor]
+                              alignment:NSTextAlignmentLeft];
+    }
+    return _carLb;
+}
+
+- (UILabel *)allLb
+{
+    if (!_allLb)
+    {
+        _allLb = [UILabel labelWithText:@"累计："
+                                   font:[UIFont systemFontOfSize:13]
+                              textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                              alignment:NSTextAlignmentLeft];
+    }
+    return _allLb;
+}
+
+- (UILabel *)driveLb
+{
+    if (!_driveLb)
+    {
+        _driveLb = [UILabel labelWithText:@"司机："
+                                     font:[UIFont systemFontOfSize:12]
+                                textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                alignment:NSTextAlignmentLeft];
+    }
+    return _driveLb;
+}
+
+- (UILabel *)typeLb
+{
+    if (!_typeLb)
+    {
+        _typeLb = [UILabel labelWithText:@"自倒"
+                                    font:[UIFont systemFontOfSize:13]
+                               textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                               alignment:NSTextAlignmentLeft];
+    }
+    return _typeLb;
+}
+
+- (UILabel *)timeLb
+{
+    if (!_timeLb)
+    {
+        _timeLb = [UILabel labelWithText:@"时间"
+                                    font:[UIFont systemFontOfSize:12]
+                               textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                               alignment:NSTextAlignmentLeft];
+    }
+    return _timeLb;
+}
+
+- (void)customerUI
+{
+    UIView *backView = [UIView new];
+    backView.backgroundColor = [UIColor whiteColor];
+    [self.contentView addSubview:backView];
+    [backView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(16);
+        make.right.equalTo(self.contentView).offset(-16);
+        make.top.bottom.equalTo(self.contentView);
+    }];
+    
+    [backView addSubview:self.image];
+    [_image mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(100);
+        make.height.equalTo(70);
+        make.left.equalTo(backView).offset(16);
+        make.centerY.equalTo(backView);
+    }];
+    
+    [backView addSubview:self.carLb];
+    [_carLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.top.equalTo(self.image);
+        make.left.equalTo(self.image.mas_right).offset(10);
+    }];
+    
+    [backView addSubview:self.allLb];
+    [_allLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.carLb);
+        make.centerY.equalTo(self.image);
+    }];
+    
+    [backView addSubview:self.driveLb];
+    [_driveLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.carLb);
+        make.bottom.equalTo(self.image);
+    }];
+    
+    [backView addSubview:self.typeLb];
+    [_typeLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(backView).offset(-16);
+        make.centerY.equalTo(self.allLb);
+    }];
+    
+    [backView addSubview:self.timeLb];
+    [_timeLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(backView).offset(-16);
+        make.bottom.equalTo(self.driveLb);
+    }];
+    
+    UIView *bottomLine = [UIView new];
+    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    [backView addSubview:bottomLine];
+    [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(0.5);
+        make.left.bottom.right.equalTo(backView);
+    }];
+}
+
+@end
