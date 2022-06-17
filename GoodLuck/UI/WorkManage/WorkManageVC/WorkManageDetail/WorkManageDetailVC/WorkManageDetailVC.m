@@ -16,12 +16,19 @@
 #import "OnWorkLilstResponse.h"
 #import "RoleApproveVC.h"
 #import "WorkOrderApproveVC.h"
+#import "WorkManageCarHeaderView.h"
 #import "WorkOrderResponse.h"
+#import "WorkManageCardCell.h"
+#import "WorkManageCardHeaderView.h"
+#import "WorkManageSoilCell.h"
+#import "EchartCell.h"
+#import "WorkOrderDetailVC.h"
 @interface WorkManageDetailVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIBarButtonItem *configBt; /// 配置
 @property (nonatomic, strong) UIBarButtonItem *offBt; /// 下班
 @property (nonatomic, strong) WorkManageDetailHeaderView *hearderView;
+@property (nonatomic, assign) WorkDataType dataType;
 @end
 
 @implementation WorkManageDetailVC
@@ -40,6 +47,18 @@
 //    [self getCardRequest];
 //    [self getEarthRequest];
 //    [self getFleetRequest];
+}
+
+- (UIView *)getCarHeaderView
+{
+    WorkManageCarHeaderView *view = [WorkManageCarHeaderView new];
+    return view;
+}
+
+- (UIView *)getCardHeaderView
+{
+    WorkManageCardHeaderView *view = [WorkManageCardHeaderView new];
+    return view;
 }
 
 - (void)getData
@@ -151,13 +170,16 @@
 {
     if (!_tableView)
     {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableHeaderView = [self headerView];
         _tableView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerClass:WorkManageCarCell.class forCellReuseIdentifier:NSStringFromClass(WorkManageCarCell.class)];
+        [_tableView registerClass:WorkManageCardCell.class forCellReuseIdentifier:NSStringFromClass(WorkManageCardCell.class)];
+        [_tableView registerClass:WorkManageSoilCell.class forCellReuseIdentifier:NSStringFromClass(WorkManageSoilCell.class)];
+        [_tableView registerClass:EchartCell.class forCellReuseIdentifier:NSStringFromClass(EchartCell.class)];
     }
     return _tableView;
 }
@@ -187,7 +209,56 @@
         WorkOrderApproveVC *workOrderApproveVC = [WorkOrderApproveVC new];
         [weakself.navigationController pushViewController:workOrderApproveVC animated:YES];
     }];
+    [_hearderView.subject subscribeNext:^(id  _Nullable x) {
+        if (weakself.dataType == [x intValue])
+        {
+            return;
+        }
+        weakself.dataType = [x intValue];
+        [weakself getCurrentData];
+        
+    }];
     return _hearderView;
+}
+
+- (void)getCurrentData
+{
+    switch (self.dataType)
+    {
+        case Car:
+        {
+            [self getCarRequest];
+            break;
+        }
+        case Soil:
+        {
+            [self getEarthRequest];
+            break;
+        }
+        case Card:
+        {
+            [self getCardRequest];
+            break;
+        }
+        case ZTC:
+        {
+            break;
+        }
+        case Fall:
+        {
+            break;
+        }
+        case CarTeam:
+        {
+            [self getFleetRequest];
+            break;
+        }
+        case Backhoe:
+        {
+            break;
+        }
+    }
+    [self.tableView reloadData];
 }
 
 - (void)customerUI
@@ -215,12 +286,6 @@
     } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
         
     }];
-}
-
-- (UIView *)carHeaderView
-{
-    UIView *view = [UIView new];
-    return view;
 }
 
 /// 卡牌请求
@@ -283,27 +348,266 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self carHeaderView];
+    UIView *view = [UIView new];
+    switch (self.dataType)
+    {
+        case Car:
+        {
+            view = [self getCarHeaderView];
+            break;
+        }
+        case CarTeam:
+        case Soil:
+        {
+            break;
+        }
+        case Card:
+        {
+            view = [self getCardHeaderView];
+            break;
+        }
+        case ZTC:
+        {
+            break;
+        }
+        case Fall:
+        {
+            break;
+        }
+        case Backhoe:
+        {
+            break;
+        }
+    }
+    return view;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 60;
+    CGFloat height;
+    switch (self.dataType)
+    {
+        case Car:
+        {
+            height = 80;
+            break;
+        }
+        case CarTeam:
+        case Soil:
+        {
+            height = 0;
+            break;
+        }
+        case Card:
+        {
+            height = 120;
+            break;
+        }
+        case ZTC:
+        {
+            height = 0;
+            break;
+        }
+        case Fall:
+        {
+            height = 0;
+            break;
+        }
+        case Backhoe:
+        {
+            height = 0;
+            break;
+        }
+    }
+    return height;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [UIView new];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    CGFloat height;
+    switch (self.dataType)
+    {
+        case Car:
+        {
+            height = 16;
+            break;
+        }
+        case CarTeam:
+        case Soil:
+        {
+            height = 0;
+            break;
+        }
+        case Card:
+        {
+            height = 16;
+            break;
+        }
+        case ZTC:
+        {
+            height = 0;
+            break;
+        }
+        case Fall:
+        {
+            height = 0;
+            break;
+        }
+        case Backhoe:
+        {
+            height = 0;
+            break;
+        }
+    }
+    return height;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    CGFloat number;
+    switch (self.dataType)
+    {
+        case Car:
+        {
+            number = 1;
+            break;
+        }
+        case Soil:
+        {
+            number = 1;
+            break;
+        }
+        case Card:
+        {
+            number = 1;
+            break;
+        }
+        case ZTC:
+        {
+            number = 1;
+            break;
+        }
+        case Fall:
+        {
+            number = 1;
+            break;
+        }
+        case CarTeam:
+        {
+            number = 1;
+            break;
+        }
+        case Backhoe:
+        {
+            number = 1;
+            break;
+        }
+    }
+    return number;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    CGFloat height;
+    switch (self.dataType)
+    {
+        case Car:
+        {
+            height = 100;
+            break;
+        }
+        case Soil:
+        {
+            height = 56;
+            break;
+        }
+        case Card:
+        {
+            height = 40;
+            break;
+        }
+        case ZTC:
+        {
+            height = 200;
+            break;
+        }
+        case Fall:
+        {
+            height = 200;
+            break;
+        }
+        case CarTeam:
+        {
+            height = 56;
+            break;
+        }
+        case Backhoe:
+        {
+            height = 56;
+            break;
+        }
+    }
+    return height;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 6;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    WorkManageCarCell *cell = [WorkManageCarCell cellWithCollectionView:tableView];
+    UITableViewCell *cell;
+    switch (self.dataType)
+    {
+        case Car:
+        {
+            cell = [WorkManageCarCell cellWithCollectionView:tableView];
+            break;
+        }
+        case Soil:
+        {
+            cell = [WorkManageSoilCell cellWithCollectionView:tableView];
+            break;
+        }
+        case Card:
+        {
+            cell = [WorkManageCardCell cellWithCollectionView:tableView];
+            break;
+        }
+        case ZTC:
+        {
+            cell = [EchartCell cellWithCollectionView:tableView];
+            break;
+        }
+        case Fall:
+        {
+            cell = [EchartCell cellWithCollectionView:tableView];
+            break;
+        }
+        case CarTeam:
+        {
+            cell = [WorkManageSoilCell cellWithCollectionView:tableView];
+            break;
+        }
+        case Backhoe:
+        {
+            cell = [WorkManageSoilCell cellWithCollectionView:tableView];
+            break;
+        }
+    }
+    
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    WorkOrderDetailVC *workOrderDetailVC = [WorkOrderDetailVC new];
+    [self.navigationController pushViewController:workOrderDetailVC animated:YES];
 }
 @end

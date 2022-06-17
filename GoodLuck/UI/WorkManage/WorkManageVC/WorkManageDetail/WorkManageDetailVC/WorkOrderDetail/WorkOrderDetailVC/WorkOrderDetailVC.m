@@ -1,37 +1,23 @@
 //
-//  RoleApproveVC.m
+//  WorkOrderDetailVC.m
 //  GoodLuck
 //
-//  Created by 徐志成 on 2022/6/6.
+//  Created by 徐志成 on 2022/6/16.
 //
 
-#import "RoleApproveVC.h"
-#import "RoleApproveCell.h"
-@interface RoleApproveVC ()<UITableViewDelegate,UITableViewDataSource>
+#import "WorkOrderDetailVC.h"
+#import "WorkOrderDetailCell.h"
+@interface WorkOrderDetailVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @end
 
-@implementation RoleApproveVC
+@implementation WorkOrderDetailVC
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"角色审批";
+    self.title = @"工单详情";
     [self customerUI];
-    [self getData];
-}
-
-- (void)getData
-{
-    GetRequest *request = [[GetRequest alloc] initWithRequestUrl:listapply argument:@{@"projectId":self.projectId,@"role":@"BOSS"}];
-    [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
-        if (success)
-        {
-            
-        }
-    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
-        
-    }];
 }
 
 - (UITableView *)tableView
@@ -44,7 +30,7 @@
         _tableView.tableHeaderView = [self headerView];
         _tableView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        [_tableView registerClass:RoleApproveCell.class forCellReuseIdentifier:NSStringFromClass(RoleApproveCell.class)];
+        [_tableView registerClass:WorkOrderDetailCell.class forCellReuseIdentifier:NSStringFromClass(WorkOrderDetailCell.class)];
     }
     return _tableView;
 }
@@ -78,7 +64,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    RoleApproveCell *cell = [RoleApproveCell cellWithCollectionView:tableView];
+    WorkOrderDetailCell *cell = [WorkOrderDetailCell cellWithCollectionView:tableView];
     return cell;
 }
 

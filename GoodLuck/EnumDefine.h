@@ -40,4 +40,14 @@ typedef enum {
     
 } WorkSettingType;
 
+typedef enum {
+    Car, /// 车辆
+    Soil, /// 土
+    Card,  /// 卡牌
+    ZTC, /// 渣土场
+    Fall, /// 自倒
+    CarTeam, /// 车队
+    Backhoe /// 挖机
+} WorkDataType;
+
 #endif /* EnumDefine_h */

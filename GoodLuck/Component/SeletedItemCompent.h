@@ -10,8 +10,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SeletedItemCompent : UIView
+@property (nonatomic, strong) RACSubject *subject;
 - (instancetype)initWithArray:(NSArray *)array;
 - (instancetype)initScrollWithArray:(NSArray *)array;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -28,7 +28,7 @@
 {
     if (!_timeLb)
     {
-        _timeLb = [UILabel labelWithText:@""
+        _timeLb = [UILabel labelWithText:@"2022-06-18"
                                     font:[UIFont boldSystemFontOfSize:13]
                                textColor:[UIColor blueColor]
                                alignment:NSTextAlignmentLeft];
@@ -110,6 +110,20 @@
     [_outNumber mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.enterNumber);
         make.centerX.equalTo(self);
+    }];
+    
+    [backView addSubview:self.carNumber];
+    [_carNumber mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(backView).offset(-16);
+        make.centerY.equalTo(self.enterNumber);
+    }];
+    
+    UIView *lineView = [UIView new];
+    lineView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    [backView addSubview:lineView];
+    [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(backView);
+        make.height.equalTo(0.5);
     }];
     
 }

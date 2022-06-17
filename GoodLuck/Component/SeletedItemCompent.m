@@ -22,6 +22,15 @@
     return self;
 }
 
+- (RACSubject *)subject
+{
+    if (!_subject)
+    {
+        _subject = [RACSubject new];
+    }
+    return _subject;
+}
+
 - (instancetype)initScrollWithArray:(NSArray *)array
 {
     self = [super init];
@@ -103,6 +112,7 @@
 
 - (void)seletedHandle:(int)index
 {
+    [self.subject sendNext:[NSNumber numberWithInt:index]];
     for (int i = 0; i < self.labels.count; i++)
     {
         UILabel *label = self.labels[i];
@@ -115,6 +125,9 @@
                 make.height.equalTo(2);
                 make.width.equalTo(40);
                 make.centerX.equalTo(label);
+            }];
+            [UIView animateWithDuration:0.3 animations:^{
+                [self layoutIfNeeded];
             }];
         }
     }

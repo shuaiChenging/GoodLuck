@@ -21,6 +21,15 @@
     return self;
 }
 
+- (RACSubject *)subject
+{
+    if (!_subject)
+    {
+        _subject = [RACSubject new];
+    }
+    return _subject;
+}
+
 - (void)customerUI
 {
     WorkManageItemView *workManggeItemView = [WorkManageItemView new];
@@ -31,6 +40,10 @@
     }];
     
     SeletedItemCompent *itemCompent = [[SeletedItemCompent alloc] initScrollWithArray:@[@"车辆",@"土类型",@"卡牌",@"渣土场",@"自倒",@"车队",@"挖机"]];
+    WeakSelf(self)
+    [itemCompent.subject subscribeNext:^(id  _Nullable x) {
+        [weakself.subject sendNext:x];
+    }];
     [self addSubview:itemCompent];
     [itemCompent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self);

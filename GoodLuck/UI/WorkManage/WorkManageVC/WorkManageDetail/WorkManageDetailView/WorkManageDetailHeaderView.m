@@ -77,6 +77,15 @@
     return _admiView;
 }
 
+- (RACSubject *)subject
+{
+    if (!_subject)
+    {
+        _subject = [RACSubject new];
+    }
+    return _subject;
+}
+
 - (void)customerUI
 {
     if ([LoginInfoManage shareInstance].isBoss)
@@ -156,6 +165,10 @@
     }];
     
     WorkStatisticsView *workView = [WorkStatisticsView new];
+    WeakSelf(self)
+    [workView.subject subscribeNext:^(id  _Nullable x) {
+        [weakself.subject sendNext:x];
+    }];
     [self addSubview:workView];
     [workView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(lineView.mas_bottom);

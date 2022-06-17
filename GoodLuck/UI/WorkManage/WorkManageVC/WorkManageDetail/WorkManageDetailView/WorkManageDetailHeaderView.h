@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UILabel *currentPeople;
 @property (nonatomic, strong) UIView *scanView;
 
+@property (nonatomic, strong) RACSubject *subject;
+
 - (void)loadOrderWithModel:(WorkOrderResponse *)response;
 @end
 
