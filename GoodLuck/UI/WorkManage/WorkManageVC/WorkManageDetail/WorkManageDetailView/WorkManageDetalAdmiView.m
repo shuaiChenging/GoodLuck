@@ -7,10 +7,9 @@
 
 #import "WorkManageDetalAdmiView.h"
 @interface WorkManageDetalAdmiView ()
-@property (nonatomic, strong) UILabel *printerStateLb;
-@property (nonatomic, strong) UILabel *modelLb;
-@property (nonatomic, strong) UILabel *offficeStateLb;
+@property (nonatomic, strong) UIImageView *stateImg;
 @end
+
 @implementation WorkManageDetalAdmiView
 
 - (instancetype)init
@@ -24,6 +23,15 @@
     return self;
 }
 
+- (UIImageView *)stateImg
+{
+    if (!_stateImg)
+    {
+        _stateImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"manage_detail_sun"]];
+    }
+    return _stateImg;
+}
+
 - (UILabel *)printerStateLb
 {
     if (!_printerStateLb)
@@ -32,20 +40,9 @@
                                             font:[UIFont systemFontOfSize:12]
                                        textColor:[UIColor redColor]
                                        alignment:NSTextAlignmentLeft];
+        _printerStateLb.userInteractionEnabled = YES;
     }
     return _printerStateLb;
-}
-
-- (UILabel *)modelLb
-{
-    if (!_modelLb)
-    {
-        _modelLb = [UILabel labelWithText:@"离线"
-                                     font:[UIFont systemFontOfSize:12]
-                                textColor:[UIColor redColor]
-                                alignment:NSTextAlignmentLeft];
-    }
-    return _modelLb;
 }
 
 - (UILabel *)offficeStateLb
@@ -63,7 +60,7 @@
 - (void)customerUI
 {
     UIView *topLine = [UIView new];
-    topLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    topLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self addSubview:topLine];
     [topLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.right.equalTo(self);
@@ -86,6 +83,25 @@
         make.centerY.equalTo(self);
     }];
     
+    [self addSubview:self.offficeStateLb];
+    [_offficeStateLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self).offset(-16);
+        make.centerY.equalTo(self);
+    }];
+
+    [self addSubview:self.stateImg];
+    [_stateImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.equalTo(20);
+        make.centerY.equalTo(self);
+        make.right.equalTo(self.offficeStateLb.mas_left).offset(-8);
+    }];
+    
+}
+
+- (void)changeState:(BOOL)isDay
+{
+    self.offficeStateLb.text = isDay ? @"白班" : @"晚班";
+    _stateImg.image = [UIImage imageNamed:isDay ? @"manage_detail_sun":@"manage_detail_moon"];
 }
 
 @end

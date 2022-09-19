@@ -10,7 +10,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface InfoInputCountCompent : UIView
-@property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, strong) GLTextField *textField;
+@property (nonatomic, strong) UILabel *numberLb;
 - (void)setName:(NSString *)name placeholder:(NSString *)placehodler;
 @end
 

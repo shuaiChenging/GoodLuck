@@ -18,7 +18,7 @@
         self.layer.masksToBounds = YES;
         self.layer.cornerRadius = 2;
         self.layer.borderWidth = 0.5;
-        self.layer.borderColor = [UIColor blueColor].CGColor;
+        self.layer.borderColor = [UIColor jk_colorWithHexString:COLOR_4B8BC3].CGColor;
         [self customerUI];
     }
     return self;
@@ -29,8 +29,8 @@
     if (!_nameLb)
     {
         _nameLb = [UILabel labelWithText:@""
-                                    font:[UIFont systemFontOfSize:14]
-                               textColor:[UIColor blueColor]
+                                    font:[UIFont systemFontOfSize:font_13]
+                               textColor:[UIColor jk_colorWithHexString:COLOR_4B8BC3]
                                alignment:NSTextAlignmentCenter];
     }
     return _nameLb;
@@ -40,7 +40,7 @@
 {
     [self addSubview:self.nameLb];
     [_nameLb mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self).insets(UIEdgeInsetsMake(4, 6, 4, 6));
+        make.edges.equalTo(self).insets(UIEdgeInsetsMake(6, 8, 6, 8));
     }];
 }
 

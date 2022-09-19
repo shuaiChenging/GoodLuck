@@ -6,11 +6,11 @@
 //
 
 #import "WorkOrderStatisticsView.h"
-#import "TimeShowView.h"
 #import "WorkManageItemView.h"
 #import "WorkInfoView.h"
+#import "OrderStatisticsVC.h"
+#import "LoginInfoManage.h"
 @interface WorkOrderStatisticsView ()
-@property (nonatomic, strong) TimeShowView *timeShowView;
 @property (nonatomic, strong) NSArray *array;
 @property (nonatomic, strong) NSMutableArray *wokInfoViews;
 @end
@@ -23,12 +23,19 @@
     {
         self.backgroundColor = [UIColor whiteColor];
         self.wokInfoViews = [NSMutableArray arrayWithCapacity:0];
-        self.array = @[@{@"number":@"1",@"name":@"全部工单数"},
-                       @{@"number":@"1",@"name":@"渣土场工单"},
-                       @{@"number":@"1",@"name":@"自倒工单"},
-                       @{@"number":@"1",@"name":@"异常工单"},
-                       @{@"number":@"1",@"name":@"删除工单"},
-                       @{@"number":@"1",@"name":@"历史总工单"}];
+        self.array = @[@{@"number":@"0",@"name":@"全部工单数"},
+                       @{@"number":@"0",@"name":@"渣土场工单"},
+                       @{@"number":@"0",@"name":@"自倒工单"},
+                       @{@"number":@"0",@"name":@"异常工单"},
+                       @{@"number":@"0",@"name":@"删除工单"},
+                       @{@"number":@"0",@"name":@"历史总工单"}];
+        if (![LoginInfoManage shareInstance].isBoss)
+        {
+            self.array = @[@{@"number":@"0",@"name":@"全部工单"},
+                           @{@"number":@"0",@"name":@"我的工单"},
+                           @{@"number":@"0",@"name":@"我的异常工单"},
+                           @{@"number":@"0",@"name":@"删除工单"}];
+        }
         [self customerUI];
     }
     return self;
@@ -53,6 +60,12 @@
     }];
     
     WorkManageItemView *workManggeItemView = [WorkManageItemView new];
+    WeakSelf(self)
+    [workManggeItemView.detailLb jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        OrderStatisticsVC *orderStatisticsVC = [OrderStatisticsVC new];
+        orderStatisticsVC.projectId = weakself.projectId;
+        [[Tools getTopMostController].navigationController pushViewController:orderStatisticsVC animated:YES];
+    }];
     [self addSubview:workManggeItemView];
     [workManggeItemView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.timeShowView.bottom);
@@ -84,11 +97,11 @@
             }
             make.top.equalTo(workManggeItemView.mas_bottom);
             make.bottom.equalTo(self);
-            if (i == self.array.count - 1)
+            if (i == self.array.count - 1 && [LoginInfoManage shareInstance].isBoss)
             {
                 make.right.equalTo(scrollView);
             }
-            make.width.equalTo(80);
+            make.width.equalTo( [LoginInfoManage shareInstance].isBoss  ? 80 : (kScreenWidth/self.array.count));
             
         }];
         
@@ -106,22 +119,22 @@
         switch (i) {
             case 0:
             {
-                infoView.numberLb.text = response.allCount;
+                infoView.numberLb.text =  response.allCount;
                 break;
             }
             case 1:
             {
-                infoView.numberLb.text = response.ztcCount;
+                infoView.numberLb.text = [LoginInfoManage shareInstance].isBoss ? response.ztcCount: response.allCount;
                 break;
             }
             case 2:
             {
-                infoView.numberLb.text = response.zdCount;
+                infoView.numberLb.text = [LoginInfoManage shareInstance].isBoss ? response.zdCount: response.exceptionCount;
                 break;
             }
             case 3:
             {
-                infoView.numberLb.text = response.exceptionCount;
+                infoView.numberLb.text = [LoginInfoManage shareInstance].isBoss ? response.exceptionCount: response.delCount;
                 break;
             }
             case 4:

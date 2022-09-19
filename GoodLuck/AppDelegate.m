@@ -7,11 +7,16 @@
 
 #import "AppDelegate.h"
 #import "BaseTabBarVC.h"
-#import "LoginVC.h"
+#import "AccountLoginVC.h"
 #import "IQKeyboardManager.h"
 #import "BaseNavigationVC.h"
 #import "LoginInfoManage.h"
-#import "PPGetAddressBook.h"
+#import <MAMapKit/MAMapKit.h>
+#import <AMapFoundationKit/AMapFoundationKit.h>
+#import <PrinterSDK/PrinterSDK.h>
+#import "YTKNetworkConfig.h"
+#import "YTKNetworkAgent.h"
+#import <AipOcrSdk/AipOcrSdk.h>
 @interface AppDelegate ()<UITabBarControllerDelegate, CYLTabBarControllerDelegate>
 
 @end
@@ -25,15 +30,40 @@
     {
         [UITableView appearance].sectionHeaderTopPadding = 0;
     }
-    /// 请求用户获取通讯录权限
-    [PPGetAddressBook requestAddressBookAuthorization];
+    
+    if (@available(iOS 13.0, *))
+    {
+        self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+    }
+
+    [PTDispatcher share];
     
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
+    [AMapServices sharedServices].enableHTTPS = YES;
+    [AMapServices sharedServices].apiKey = @"577588c2b39d944ad0c01b30466f5eb3";
+    
+    [[AipOcrService shardService] authWithAK:@"w0xGgM0MiNNLe215cPG4lq4y" andSK:@"n8XCZKD7iEsLOR4nfbDSWDN8CMqRnlh6"];
+    
+    [MAMapView updatePrivacyShow:AMapPrivacyShowStatusDidShow privacyInfo:AMapPrivacyInfoStatusDidContain];
+    [MAMapView updatePrivacyAgree:AMapPrivacyAgreeStatusDidAgree];
+    
     [self getLocalToken];
     [self customizeInterface];
     [self configKeyboard];
+    
+    [SVProgressHUD setDefaultStyle:SVProgressHUDStyleDark];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeClear];
+    [SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeNative];
+    [SVProgressHUD setMinimumDismissTimeInterval:0.5];
+    [SVProgressHUD setMaximumDismissTimeInterval:1.5];
+    
+    [YTKNetworkConfig sharedConfig].debugLogEnabled = YES;
+    // AFNet支持text.
+    YTKNetworkAgent *agent = [YTKNetworkAgent sharedAgent];
+    [agent setValue:[NSSet setWithObjects:@"application/json",@"text/json",@"text/javascript",@"text/html",nil] forKeyPath:@"_manager.responseSerializer.acceptableContentTypes"];
+    
     return YES;
 }
 
@@ -47,6 +77,13 @@
     else
     {
         [LoginInfoManage shareInstance].token = token;
+        NSDictionary *info = [DDDataStorageManage userDefaultsGetObjectWithKey:INFOKEY];
+        PersonalCenterResponse *respose = [PersonalCenterResponse new];
+        respose.name = info[@"name"];
+        respose.phone = info[@"phone"];
+        respose.tenantId = info[@"tenantId"];
+        respose.approveStatus = info[@"approveStatus"];
+        [LoginInfoManage shareInstance].personalResponse = respose;
         [self tabbarMainView];
     }
 }
@@ -61,7 +98,7 @@
 
 - (void)loginMainView
 {
-    BaseNavigationVC *loginNavi = [[BaseNavigationVC alloc] initWithRootViewController:[LoginVC new]];
+    BaseNavigationVC *loginNavi = [[BaseNavigationVC alloc] initWithRootViewController:[AccountLoginVC new]];
     self.window.rootViewController = loginNavi;
     [self.window makeKeyAndVisible];
 }
@@ -70,9 +107,9 @@
 {
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].shouldResignOnTouchOutside = YES;
-    [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
+    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
     [IQKeyboardManager sharedManager].toolbarDoneBarButtonItemText = @"";
-    [IQKeyboardManager sharedManager].shouldShowToolbarPlaceholder = YES;
+    [IQKeyboardManager sharedManager].shouldShowToolbarPlaceholder = NO;
     [IQKeyboardManager sharedManager].keyboardDistanceFromTextField = 25;
 }
 

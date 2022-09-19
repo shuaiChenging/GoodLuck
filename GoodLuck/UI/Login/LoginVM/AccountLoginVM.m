@@ -28,17 +28,22 @@
         NSString *phoneNo = input[@"phoneNo"];
         NSString *code = input[@"code"];
         return [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+            [SVProgressHUD showWithStatus:@"登录中..."];
             PostRequest *request = [[PostRequest alloc] initWithRequestUrl:phonelogin argument:@{@"phone":phoneNo,@"password":code}];
             [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
                 if (success)
                 {
                     [LoginInfoManage shareInstance].token = result[@"data"];
                     [DDDataStorageManage userDefaultsSaveObject:result[@"data"] forKey:TOKENKEY];
+                    [Tools getUserInfo];
                     [subscriber sendNext:@"1"];
+                    [SVProgressHUD dismiss];
                 }
                 [subscriber sendCompleted];
+                
             } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
                 [subscriber sendCompleted];
+                [SVProgressHUD dismiss];
             }];
             
             return [RACDisposable disposableWithBlock:^{
@@ -58,4 +63,5 @@
         }
     }];
 }
+
 @end

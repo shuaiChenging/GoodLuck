@@ -7,7 +7,7 @@
 
 #import "WorkStatisticsView.h"
 #import "WorkManageItemView.h"
-#import "SeletedItemCompent.h"
+#import "LoginInfoManage.h"
 @implementation WorkStatisticsView
 
 - (instancetype)init
@@ -34,18 +34,25 @@
 {
     WorkManageItemView *workManggeItemView = [WorkManageItemView new];
     workManggeItemView.nameLb.text = @"工地数据统计";
+    workManggeItemView.arrowImg.hidden = YES;
+    workManggeItemView.detailLb.hidden = YES;
     [self addSubview:workManggeItemView];
     [workManggeItemView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self);
     }];
     
-    SeletedItemCompent *itemCompent = [[SeletedItemCompent alloc] initScrollWithArray:@[@"车辆",@"土类型",@"卡牌",@"渣土场",@"自倒",@"车队",@"挖机"]];
+    NSArray *array = @[@"车辆",@"土类型",@"卡牌",@"渣土场",@"自倒",@"车队"];
+    if (![LoginInfoManage shareInstance].isBoss)
+    {
+        array = @[@"车辆",@"渣土场",@"自倒",@"卡牌",@"车队",@"土类型",@"放行记录"];
+    }
+    self.itemCompent = [[SeletedItemCompent alloc] initScrollWithArray:array];
     WeakSelf(self)
-    [itemCompent.subject subscribeNext:^(id  _Nullable x) {
+    [self.itemCompent.subject subscribeNext:^(id  _Nullable x) {
         [weakself.subject sendNext:x];
     }];
-    [self addSubview:itemCompent];
-    [itemCompent mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self addSubview:self.itemCompent];
+    [self.itemCompent mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self);
         make.top.equalTo(workManggeItemView.mas_bottom);
     }];

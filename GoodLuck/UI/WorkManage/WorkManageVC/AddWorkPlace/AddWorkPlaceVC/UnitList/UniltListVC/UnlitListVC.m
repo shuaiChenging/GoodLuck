@@ -18,10 +18,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
     [self customerUI];
     [self getData];
 }
+
 
 - (RACSubject *)subject
 {
@@ -39,6 +40,7 @@
         _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerClass:UniltListCell.class forCellReuseIdentifier:NSStringFromClass(UniltListCell.class)];
     }
@@ -53,6 +55,7 @@
         if (success)
         {
             weakself.soucrs = [CompanyListResponse mj_objectArrayWithKeyValuesArray:result[@"data"]];
+            [weakself handData];
             [weakself.tableView reloadData];
             
         }
@@ -61,7 +64,16 @@
     }];
 }
 
-
+- (void)handData
+{
+    if (![Tools isEmpty:self.companyId])
+    {
+        for (CompanyListResponse *response in self.soucrs)
+        {
+            response.isSeleted = [response.companyId isEqualToString:self.companyId];
+        }
+    }
+}
 
 - (void)customerUI
 {
@@ -75,7 +87,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 46;
+    return 54;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

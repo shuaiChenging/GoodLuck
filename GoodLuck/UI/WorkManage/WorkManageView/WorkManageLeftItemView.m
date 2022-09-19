@@ -9,6 +9,7 @@
 @interface WorkManageLeftItemView ()
 @property (nonatomic, strong) UIImageView *imgIcon;
 @property (nonatomic, strong) UILabel *nameLb;
+@property (nonatomic, strong) UIImageView *arrowImg;
 @end
 @implementation WorkManageLeftItemView
 
@@ -18,7 +19,7 @@
     if (self)
     {
         self.userInteractionEnabled = YES;
-//        [self customerUI];
+        [self customerUI];
     }
     return self;
 }
@@ -28,7 +29,6 @@
     if (!_imgIcon)
     {
         _imgIcon = [UIImageView new];
-        _imgIcon.backgroundColor = [UIColor grayColor];
     }
     return _imgIcon;
 }
@@ -45,26 +45,32 @@
     return _nameLb;
 }
 
+- (UIImageView *)arrowImg
+{
+    if (!_arrowImg)
+    {
+        _arrowImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"manage_detail_time_select"]];
+    }
+    return _arrowImg;
+}
+
 - (void)customerUI
 {
     [self addSubview:self.imgIcon];
-    [_imgIcon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(30);
-        make.centerY.equalTo(self);
-        make.left.equalTo(self);
-    }];
+    _imgIcon.frame = CGRectMake(0, 7, 30, 30);
     
     [self addSubview:self.nameLb];
-    [_nameLb mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.imgIcon.mas_right).offset(6);
-        make.centerY.equalTo(self);
-    }];
+    _nameLb.frame = CGRectMake(36, 0, 90, 44);
+    
+    [self addSubview:self.arrowImg];
 }
 
 - (void)setImageName:(NSString *)imageName name:(NSString *)name
 {
     self.imgIcon.image = [UIImage imageNamed:imageName];
     self.nameLb.text = name;
+    CGSize size = [self.nameLb sizeThatFits:CGSizeMake(MAXFLOAT, 44)];
+    _arrowImg.frame = CGRectMake(36 + size.width + 2, 18 , 9, 9.0/13 * 9);
 }
 
 @end

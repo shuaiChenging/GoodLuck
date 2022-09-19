@@ -8,8 +8,6 @@
 #import "InfoInputCountCompent.h"
 @interface InfoInputCountCompent ()
 @property (nonatomic, strong) UILabel *nameLb;
-@property (nonatomic, strong) UILabel *numberLb;
-
 @end
 @implementation InfoInputCountCompent
 
@@ -24,11 +22,11 @@
     return self;
 }
 
-- (UITextField *)textField
+- (GLTextField *)textField
 {
     if (!_textField)
     {
-        _textField = [UITextField new];
+        _textField = [GLTextField new];
         _textField.textColor = [UIColor jk_colorWithHexString:@"666666"];
         _textField.font = [UIFont systemFontOfSize:15];
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -98,7 +96,7 @@
 - (void)setName:(NSString *)name placeholder:(NSString *)placehodler
 {
     self.nameLb.text = name;
-    self.textField.placeholder = placehodler;
+    [self.textField placeHolderString:placehodler];
 }
 
 @end

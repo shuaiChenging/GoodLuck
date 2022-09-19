@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WorkManageDetailVC : BaseVC
+@property (nonatomic, strong) RACSubject *subject;
 @property (nonatomic, strong) ProjectListResponse *response;
 @end
 

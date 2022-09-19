@@ -10,8 +10,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WorkConfigSwitchCell : UITableViewCell
+@property (nonatomic, copy) NSString *projectId;
 + (instancetype)cellWithCollectionView:(UITableView *)tableView;
-- (void)loadViewWithModel:(WorkConfigDetailModel *)model;
+- (void)loadViewWithModel:(WorkConfigDetailModel *)model projectId:(NSString *)projectId;
+
 @end
 
 NS_ASSUME_NONNULL_END

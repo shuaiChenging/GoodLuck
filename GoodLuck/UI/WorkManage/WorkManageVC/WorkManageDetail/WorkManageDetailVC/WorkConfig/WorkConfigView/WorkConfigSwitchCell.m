@@ -6,10 +6,12 @@
 //
 
 #import "WorkConfigSwitchCell.h"
+#import "LoginInfoManage.h"
 @interface WorkConfigSwitchCell ()
 @property (nonatomic, strong) UILabel *nameLb;
 @property (nonatomic, strong) UILabel *describeLb;
 @property (nonatomic, strong) UISwitch *customerSwitch;
+@property (nonatomic, strong) WorkConfigDetailModel *detailModel;
 @end
 @implementation WorkConfigSwitchCell
 
@@ -36,6 +38,7 @@
     if (!_customerSwitch)
     {
         _customerSwitch = [UISwitch new];
+        [_customerSwitch addTarget:self action:@selector(switchChange:) forControlEvents:UIControlEventValueChanged];
     }
     return _customerSwitch;
 }
@@ -57,11 +60,36 @@
     if (!_describeLb)
     {
         _describeLb = [UILabel labelWithText:@"账号与安全"
-                                        font:[UIFont systemFontOfSize:13]
-                                   textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                        font:[UIFont systemFontOfSize:font_13]
+                                   textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                    alignment:NSTextAlignmentLeft];
     }
     return _describeLb;
+}
+
+- (void)switchChange:(UISwitch *)sw
+{
+    NSString *key = @"isRememberLastConfig";
+    if ([self.detailModel.name isEqualToString:@"车牌识别辅助提醒"])
+    {
+        key = @"isWarnByIdentify";
+    }
+    GetRequest *request = [[GetRequest alloc] initWithRequestUrl:configedit argument:@{@"key":key,@"value":sw.isOn ? @"true" : @"false",@"projectId":self.projectId}];
+    [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            if ([self.detailModel.name isEqualToString:@"车牌识别辅助提醒"])
+            {
+                [LoginInfoManage shareInstance].workConfigResponse.isWarnByIdentify = sw.isOn;
+            }
+            else
+            {
+                [LoginInfoManage shareInstance].workConfigResponse.isRememberLastConfig = sw.isOn;
+            }
+        }
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+        
+    }];
 }
 
 - (void)customerUI
@@ -85,7 +113,7 @@
     }];
     
     UIView *lineView = [UIView new];
-    lineView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    lineView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.contentView addSubview:lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.contentView);
@@ -93,8 +121,16 @@
     }];
 }
 
-- (void)loadViewWithModel:(WorkConfigDetailModel *)model
+- (void)loadViewWithModel:(WorkConfigDetailModel *)model projectId:(NSString *)projectId
 {
+    BOOL status = [LoginInfoManage shareInstance].workConfigResponse.isRememberLastConfig;
+    if ([model.name isEqualToString:@"车牌识别辅助提醒"])
+    {
+        status = [LoginInfoManage shareInstance].workConfigResponse.isWarnByIdentify;
+    }
+    self.projectId = projectId;
+    self.customerSwitch.on = status;
+    self.detailModel = model;
     self.nameLb.text = model.name;
     self.describeLb.text = model.describe;
 }

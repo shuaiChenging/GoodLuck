@@ -9,7 +9,6 @@
 #import "DLTextFeild.h"
 #import "DLButton.h"
 NS_ASSUME_NONNULL_BEGIN
-
 @interface RegisterView : BaseView
 @property (nonatomic, strong) DLTextFeild *accountTF;
 @property (nonatomic, strong) DLTextFeild *codeTF;
@@ -17,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) DLTextFeild *rePasswordTF;
 @property (nonatomic, strong) DLButton *button;
 @property (nonatomic, strong) UILabel *phoneLoginLb;
+@property (nonatomic, assign) BOOL isSeleted;
 @end
 
 NS_ASSUME_NONNULL_END

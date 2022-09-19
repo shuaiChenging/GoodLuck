@@ -6,7 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "PersonalCenterResponse.h"
+#import "WorkConfigResponse.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LoginInfoManage : NSObject
@@ -15,6 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *token;
 
 @property (nonatomic, assign) BOOL isBoss;
+
+@property (nonatomic, strong) PersonalCenterResponse *personalResponse;
+/// 蓝牙是否连接
+@property (nonatomic, assign) BOOL isConnect;
+
+@property (nonatomic, strong) WorkConfigResponse *workConfigResponse;
+
+@property (nonatomic, assign) BOOL errorWorkOrder; /// 异常工单
 @end
 
 NS_ASSUME_NONNULL_END

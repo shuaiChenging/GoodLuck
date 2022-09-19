@@ -16,7 +16,12 @@
 #define kScreenWidth  [[UIScreen mainScreen] bounds].size.width
 #define kScreenHeight [[UIScreen mainScreen] bounds].size.height
 
-#define BASEURL @"http://47.104.76.23:8089"
+#define BASEURL @"https://muck.chenfanyunshu.com" ///https://muck.orgvts.com
+
+/// 用户注册协议
+#define SERVICEURL @"https://lucky-earth-cube.oss-cn-hangzhou.aliyuncs.com/customer/mobile/%E7%94%A8%E6%88%B7%E6%B3%A8%E5%86%8C%E5%8D%8F%E8%AE%AE.pdf?OSSAccessKeyId=LTAI5tEvVJ3EttHquPcrjJxM&Expires=37656655983&Signature=kENi%2FXtd%2FNHKRoiLoLnTgkuyr7A%3D"
+
+#define PRIVACY @"https://lucky-earth-cube.oss-cn-hangzhou.aliyuncs.com/customer/mobile/%E9%9A%90%E7%A7%81%E5%8D%8F%E8%AE%AE.pdf?OSSAccessKeyId=LTAI5tEvVJ3EttHquPcrjJxM&Expires=1692656027&Signature=ixe2UCe9KlQOTF02Z8kKFy9lDZ4%3D"
 
 // 判断是否是刘海屏
 #define kIsBangsScreen ({\
@@ -30,6 +35,8 @@
 
 #define WeakSelf(type) __weak typeof(type) weak##type = type;
 
+#define StrongSelf(type) __strong typeof(type) strong##type = type;
+
 // iPhoneX底部距离
 #define CS_FooterHeight (kIsBangsScreen ? 34.f : 0.f)
 
@@ -38,7 +45,17 @@
 
 #define TOKENKEY @"token"
 
+#define INFOKEY @"info"
+
 #define ROLETYPE @"role"
+
+#define MODELTYPE @"model"
+
+#define PRINTNUMBER @"printNo"
+
+#define REMBERLASTSETTING @"remberlastsetting"
+
+#define CARALERT @"caralert"
 
 
 #endif /* Config_h */

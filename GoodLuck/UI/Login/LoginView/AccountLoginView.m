@@ -23,13 +23,26 @@
 {
     if (!_phoneLoginLb)
     {
-        _phoneLoginLb = [UILabel labelWithText:@"手机快捷登录"
-                                          font:[UIFont systemFontOfSize:16]
-                                     textColor:[UIColor blackColor]
+        _phoneLoginLb = [UILabel labelWithText:@"手机号登录"
+                                          font:[UIFont systemFontOfSize:font_16]
+                                     textColor:[UIColor jk_colorWithHexString:COLOR_242424]
                                      alignment:NSTextAlignmentLeft];
         _phoneLoginLb.userInteractionEnabled = YES;
     }
     return _phoneLoginLb;
+}
+
+- (UILabel *)regiestLb
+{
+    if (!_regiestLb)
+    {
+        _regiestLb =  [UILabel labelWithText:@"账号注册"
+                                        font:[UIFont systemFontOfSize:font_16]
+                                   textColor:[UIColor jk_colorWithHexString:COLOR_242424]
+                                   alignment:NSTextAlignmentRight];
+        _regiestLb.userInteractionEnabled = YES;
+    }
+    return _regiestLb;
 }
 
 - (DLTextFeild *)accountTF
@@ -37,7 +50,7 @@
     if (!_accountTF)
     {
         _accountTF = [[DLTextFeild alloc] initWithType:UserInput];
-        _accountTF.textField.text = @"15952414057";
+//        _accountTF.textField.text = @"15952414057";
     }
     return _accountTF;
 }
@@ -47,7 +60,7 @@
     if (!_passwordTF)
     {
         _passwordTF = [[DLTextFeild alloc] initWithType:PasswordInput];
-        _passwordTF.textField.text = @"123456";
+//        _passwordTF.textField.text = @"123456";
     }
     return _passwordTF;
 }
@@ -59,7 +72,7 @@
         _button = [DLButton new];
         [_button setTitle:@"登录" forState:UIControlStateNormal];
         _button.layer.cornerRadius = 20;
-        _button.backgroundColor = [UIColor blueColor];
+        _button.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
     }
     return _button;
 }
@@ -67,39 +80,28 @@
 
 - (void)customerUI
 {
-    UIImageView *iconImg = [UIImageView new];
-    iconImg.backgroundColor = [UIColor grayColor];
+    UIImageView *iconImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_icon"]];
     [self addSubview:iconImg];
     [iconImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(60);
+        make.width.height.equalTo(130);
         make.centerX.equalTo(self);
-        make.top.equalTo(self).offset(120);
+        make.top.equalTo(self).offset(80);
     }];
     
-    UILabel *titleLb = [UILabel labelWithText:@"好运来"
-                                         font:[UIFont boldSystemFontOfSize:24]
-                                    textColor:[UIColor blueColor]
+    UILabel *titleLb = [UILabel labelWithText:@"用户登录"
+                                         font:[UIFont boldSystemFontOfSize:maxFont]
+                                    textColor:[UIColor jk_colorWithHexString:COLOR_BLUE]
                                     alignment:NSTextAlignmentCenter];
     [self addSubview:titleLb];
     [titleLb mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(iconImg.mas_bottom).offset(6);
+        make.top.equalTo(iconImg.mas_bottom);
         make.centerX.equalTo(iconImg);
-    }];
-    
-    UILabel *describeLb = [UILabel labelWithText:@"建筑工程好管家"
-                                            font:[UIFont systemFontOfSize:14]
-                                       textColor:[UIColor jk_colorWithHexString:@"#666666"]
-                                       alignment:NSTextAlignmentCenter];
-    [self addSubview:describeLb];
-    [describeLb mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(titleLb.mas_bottom).offset(6);
-        make.centerX.equalTo(titleLb);
     }];
     
     [self addSubview:self.accountTF];
     [_accountTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(40);
-        make.top.equalTo(describeLb.mas_bottom).offset(40);
+        make.top.equalTo(titleLb.mas_bottom).offset(40);
         make.left.equalTo(self).offset(16);
         make.right.equalTo(self).offset(-16);
     }];
@@ -107,7 +109,7 @@
     [self addSubview:self.passwordTF];
     [_passwordTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(40);
-        make.top.equalTo(self.accountTF.mas_bottom).offset(30);
+        make.top.equalTo(self.accountTF.mas_bottom).offset(20);
         make.left.equalTo(self.accountTF);
         make.right.equalTo(self).offset(-16);
     }];
@@ -124,6 +126,12 @@
     [_phoneLoginLb mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(40);
         make.top.equalTo(self.button.mas_bottom).offset(40);
+    }];
+    
+    [self addSubview:self.regiestLb];
+    [_regiestLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self).offset(-40);
+        make.centerY.equalTo(self.phoneLoginLb);
     }];
     
 }

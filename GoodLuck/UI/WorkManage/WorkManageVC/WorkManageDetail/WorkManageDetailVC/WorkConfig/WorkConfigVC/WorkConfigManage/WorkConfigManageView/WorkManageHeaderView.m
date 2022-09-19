@@ -37,7 +37,7 @@
         _addBt = [UIButton buttonWithType:UIButtonTypeCustom];
         [_addBt setTitle:@"新增" forState:UIControlStateNormal];
         _addBt.titleLabel.font = [UIFont systemFontOfSize:14];
-        [_addBt setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_addBt setTitleColor:[UIColor jk_colorWithHexString:COLOR_BLUE] forState:UIControlStateNormal];
     }
     return _addBt;
 }
@@ -49,7 +49,7 @@
         _editBt = [UIButton buttonWithType:UIButtonTypeCustom];
         [_editBt setTitle:@"编辑" forState:UIControlStateNormal];
         _editBt.titleLabel.font = [UIFont systemFontOfSize:14];
-        [_editBt setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_editBt setTitleColor:[UIColor jk_colorWithHexString:COLOR_BLUE] forState:UIControlStateNormal];
     }
     return _editBt;
 }
@@ -65,7 +65,7 @@
     }];
     
     UIView *lineView = [UIView new];
-    lineView.backgroundColor = [UIColor blueColor];
+    lineView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
     [self addSubview:lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(4);

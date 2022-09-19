@@ -18,7 +18,7 @@
 {
     [super viewDidLoad];
     self.title = @"修改工地管理员";
-    self.view.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    self.view.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
     [self customerUI];
 }
 
@@ -26,8 +26,7 @@
 {
     if (!_iconImg)
     {
-        _iconImg = [UIImageView new];
-        _iconImg.backgroundColor = [UIColor grayColor];
+        _iconImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_seleted_admin"]];
     }
     return _iconImg;
 }
@@ -69,7 +68,7 @@
     [button.titleLabel setFont:[UIFont systemFontOfSize:16]];
     [button setTitle:@"移除" forState:UIControlStateNormal];
     button.layer.cornerRadius = 5;
-    button.backgroundColor = [UIColor blueColor];
+    button.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
     [self.view addSubview:button];
     [button mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(16);
@@ -84,7 +83,7 @@
     
     [backView addSubview:self.iconImg];
     [_iconImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(40);
+        make.width.height.equalTo(54);
         make.left.equalTo(backView).offset(16);
         make.centerY.equalTo(backView);
     }];
@@ -95,23 +94,22 @@
         make.centerY.equalTo(backView);
     }];
     
-    UIImageView *phoneIcon = [UIImageView new];
+    UIImageView *phoneIcon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"manage_detail_phone_default"]];
     phoneIcon.userInteractionEnabled = YES;
     [phoneIcon jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-        NSMutableString *str = [[NSMutableString alloc] initWithFormat:@"tel:%@",self.response.phone];
+        NSMutableString *str = [[NSMutableString alloc] initWithFormat:@"tel:%@",weakself.response.phone];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str] options:@{} completionHandler:nil];
     }];
-    phoneIcon.backgroundColor = [UIColor grayColor];
     [backView addSubview:phoneIcon];
     [phoneIcon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(26);
+        make.width.height.equalTo(20);
         make.right.equalTo(backView).offset(-16);
         make.centerY.equalTo(backView);
     }];
     
 }
 
-- (void)deleteAdmin
+- (void)deleteRequest
 {
     WeakSelf(self)
     GetRequest *request = [[GetRequest alloc] initWithRequestUrl:deleteadmin argument:@{@"phone":self.response.phone,@"projectId":self.projectId}];
@@ -124,6 +122,17 @@
         
     } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
         
+    }];
+}
+
+- (void)deleteAdmin
+{
+    WeakSelf(self)
+    [Tools showAlertWithTitle:@"移除提示"
+                      content:[NSString stringWithFormat:@"确认要移除工地管理员%@?",self.response.name]
+                         left:@"取消"
+                        right:@"确认" block:^{
+        [weakself deleteRequest];
     }];
 }
 

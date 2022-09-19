@@ -21,24 +21,23 @@
     return self;
 }
 
-- (UIImageView *)rightImg
+- (GLImageView *)rightImg
 {
     if (!_rightImg)
     {
-        _rightImg = [UIImageView new];
-        _rightImg.backgroundColor = [UIColor grayColor];
+        _rightImg = [GLImageView new];
         _rightImg.userInteractionEnabled = YES;
     }
     return _rightImg;
 }
 
-- (UITextField *)textField
+- (GLTextField *)textField
 {
     if (!_textField)
     {
-        _textField = [UITextField new];
-        _textField.textColor = [UIColor jk_colorWithHexString:@"666666"];
-        _textField.font = [UIFont systemFontOfSize:15];
+        _textField = [GLTextField new];
+        _textField.textColor = [UIColor jk_colorWithHexString:COLOR_242424];
+        _textField.font = [UIFont systemFontOfSize:font_14];
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _textField;
@@ -49,8 +48,8 @@
     if (!_nameLb)
     {
         _nameLb = [UILabel labelWithText:@""
-                                    font:[UIFont systemFontOfSize:15]
-                               textColor:[UIColor blackColor]
+                                    font:[UIFont systemFontOfSize:font_14]
+                               textColor:[UIColor jk_colorWithHexString:COLOR_666666]
                                alignment:NSTextAlignmentLeft];
     }
     return _nameLb;
@@ -66,7 +65,7 @@
     
     [self addSubview:self.rightImg];
     [_rightImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(30);
+        make.width.height.equalTo(24);
         make.right.equalTo(self).offset(-16);
         make.centerY.equalTo(self);
     }];
@@ -82,7 +81,7 @@
 - (void)setName:(NSString *)name placeholder:(NSString *)placehodler imageName:(nullable NSString *)imageName
 {
     self.nameLb.text = name;
-    self.textField.placeholder = placehodler;
+    [self.textField placeHolderString:placehodler];
     self.rightImg.hidden = imageName.length == 0;
     if (imageName.length > 0)
     {

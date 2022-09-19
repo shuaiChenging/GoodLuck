@@ -6,8 +6,6 @@
 //
 
 #import "Request.h"
-#import "YTKNetworkConfig.h"
-#import "YTKNetworkAgent.h"
 #import "LoginInfoManage.h"
 @implementation Request
 - (instancetype)init
@@ -15,12 +13,8 @@
     self = [super init];
     if (self)
     {
-        [YTKNetworkConfig sharedConfig].debugLogEnabled = YES;
-        // AFNet支持text.
-        YTKNetworkAgent *agent = [YTKNetworkAgent sharedAgent];
-        [agent setValue:[NSSet setWithObjects:@"application/json",@"text/json",@"text/javascript",@"text/html",nil] forKeyPath:@"_manager.responseSerializer.acceptableContentTypes"];
         //AFNet支持Https 测试环境下忽略https证书。。
-        [agent setValue:@YES forKeyPath:@"_manager.securityPolicy.allowInvalidCertificates"];
+//        [agent setValue:@YES forKeyPath:@"_manager.securityPolicy.allowInvalidCertificates"];
         self.verifyJSONFormat = YES;
     }
     return self;
@@ -52,7 +46,7 @@
 
 - (NSTimeInterval)requestTimeoutInterval
 {
-    return 10;
+    return 30;
 }
 
 - (id)jsonValidator
@@ -68,7 +62,7 @@
         BOOL isSuccess = [[result objectForKey:@"code"] intValue] == 200;
         if (!isSuccess)
         {
-            [Tools showToast:[result objectForKey:@"msg"]];
+            [SVProgressHUD showImage:[UIImage imageNamed:@""] status:[result objectForKey:@"msg"]];
         }
         success(request,result,isSuccess);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
@@ -100,6 +94,7 @@
         else if (request.responseStatusCode == 401)
         {
             info = @"token失效,请重新登录";
+            [LoginInfoManage shareInstance].token = @"";
             [Tools logout];
         }
         else if (request.responseStatusCode == 500)
@@ -111,7 +106,7 @@
             info = @"获取数据失败,请重试!";
         }
     }
-    [Tools showToast:info];
+    [SVProgressHUD showImage:[UIImage imageNamed:@""] status:info];
     self.errorInfo = info;
     return info;
 }

@@ -6,11 +6,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "CarstatisticsResponse.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WorkManageCarHeaderView : UIView
-
+@interface WorkManageCarHeaderView : UITableViewHeaderFooterView
++ (instancetype)cellWithTableViewHeaderFooterView:(UITableView *)tableView;
+- (void)loadViewWithModel:(CarstatisticsResponse *)model;
 @end
 
 NS_ASSUME_NONNULL_END

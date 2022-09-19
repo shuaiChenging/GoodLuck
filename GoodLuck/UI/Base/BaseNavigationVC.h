@@ -8,7 +8,7 @@
 #import "CYLBaseNavigationController.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BaseNavigationVC : CYLBaseNavigationController
+@interface BaseNavigationVC : UINavigationController
 
 @end
 

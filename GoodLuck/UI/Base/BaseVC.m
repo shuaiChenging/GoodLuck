@@ -16,10 +16,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    self.view.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
     [self.navigationController.navigationBar setTranslucent:NO];
     [self adjustIOS15Navigationbar];
-    if (self.navigationController.viewControllers.count > 1 || self.presentationController != nil)
+    if (self.navigationController.viewControllers.count > 1 || self.presentingViewController != nil)
     {
         [self addBackBt];
     }
@@ -46,13 +46,23 @@
 
 - (void)adjustIOS15Navigationbar
 {
-    if (@available(iOS 15.0,*))
+    if (@available(iOS 13.0,*))
     {
         UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
         appearance.backgroundColor = [UIColor whiteColor];
         appearance.shadowColor = [UIColor whiteColor];
+        appearance.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor jk_colorWithHexString:@"#333333"],
+                                           NSFontAttributeName:[UIFont fontWithName:@"PingFangSC-Medium" size:18]};
         self.navigationController.navigationBar.standardAppearance = appearance;
         self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+    }
+    else
+    {
+        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor jk_colorWithHexString:@"#333333"],
+                                                   NSFontAttributeName:[UIFont fontWithName:@"PingFangSC-Medium" size:18]};
+        [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+        self.navigationController.navigationBar.shadowImage = [[UIImage alloc] init];
+        self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
     }
 }
 
@@ -62,7 +72,7 @@
     {
         [self.navigationController popViewControllerAnimated:YES];
     }
-    else if (self.presentationController != nil)
+    else if (self.presentingViewController != nil)
     {
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }

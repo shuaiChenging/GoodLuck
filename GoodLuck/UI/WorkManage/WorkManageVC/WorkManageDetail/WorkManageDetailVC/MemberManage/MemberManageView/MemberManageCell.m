@@ -41,7 +41,6 @@
     if (!_iconImg)
     {
         _iconImg = [UIImageView new];
-        _iconImg.backgroundColor = [UIColor grayColor];
     }
     return _iconImg;
 }
@@ -80,6 +79,7 @@
 - (void)setImageName:(NSString *)imageName name:(NSString *)name
 {
     self.nameLb.text = name;
+    self.iconImg.image = [UIImage imageNamed:imageName];
 }
 
 @end

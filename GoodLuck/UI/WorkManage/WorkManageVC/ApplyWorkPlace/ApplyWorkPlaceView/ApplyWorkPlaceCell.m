@@ -8,6 +8,7 @@
 #import "ApplyWorkPlaceCell.h"
 @interface ApplyWorkPlaceCell ()
 @property (nonatomic, strong) UILabel *contentLb;
+@property (nonatomic, strong) UIImageView *img;
 @end
 @implementation ApplyWorkPlaceCell
 
@@ -35,6 +36,15 @@
     return _contentLb;
 }
 
+- (UIImageView *)img
+{
+    if (!_img)
+    {
+        _img = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"manage_detail_selete_default"]];
+    }
+    return _img;
+}
+
 + (instancetype)cellWithCollectionView:(UITableView *)tableView
 {
     ApplyWorkPlaceCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass(self)];
@@ -49,8 +59,15 @@
         make.centerY.equalTo(self.contentView);
     }];
     
+    [self.contentView addSubview:self.img];
+    [_img mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.equalTo(20);
+        make.right.equalTo(self.contentView).offset(-16);
+        make.centerY.equalTo(self.contentView);
+    }];
+    
     UIView *bottomLine = [UIView new];
-    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.contentView addSubview:bottomLine];
     [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
@@ -61,7 +78,7 @@
 - (void)loadViewWithModel:(BossListResponse *)model
 {
     self.contentLb.text = model.name;
-    self.contentLb.textColor = model.isSeleted ? [UIColor redColor] : [UIColor blackColor];
+    self.img.image = [UIImage imageNamed: model.isSeleted ? @"manage_detail_seleted":@"manage_detail_selete_default"];
 }
 
 @end

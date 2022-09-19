@@ -10,7 +10,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PersonalCenterHeaderView : UIView
-
+@property (nonatomic, strong) UILabel *nameLb;
+@property (nonatomic, strong) UILabel *phoneLb;
 @end
 
 NS_ASSUME_NONNULL_END

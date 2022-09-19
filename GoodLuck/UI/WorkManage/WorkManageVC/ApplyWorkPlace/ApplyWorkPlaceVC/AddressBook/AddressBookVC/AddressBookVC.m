@@ -7,6 +7,7 @@
 
 #import "AddressBookVC.h"
 #import "PPGetAddressBook.h"
+#import "AddressBookCell.h"
 @interface AddressBookVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSDictionary *contactPeopleDict;
@@ -19,8 +20,16 @@
 {
     [super viewDidLoad];
     self.title = @"选择人员";
+    self.view.backgroundColor = [UIColor whiteColor];
+    /// 请求用户获取通讯录权限
+//    [PPGetAddressBook requestAddressBookAuthorization];
     [self customerUI];
-    [self getData];
+    WeakSelf(self);
+    CNContactStore *contactStore = [[CNContactStore alloc] init];
+    [contactStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        [weakself getData];
+    }];
+    
 }
 
 - (UITableView *)tableView
@@ -30,8 +39,9 @@
         _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [_tableView registerClass:AddressBookCell.class forCellReuseIdentifier:NSStringFromClass(AddressBookCell.class)];
     }
     return _tableView;
 }
@@ -61,13 +71,13 @@
         weakself.contactPeopleDict = addressBookDict;
         weakself.keys = nameKeys;
         [weakself.tableView reloadData];
-    } authorizationFailure:^{ 
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
-//                                                        message:@"请在iPhone的“设置-隐私-通讯录”选项中，允许PPAddressBook访问您的通讯录"
-//                                                       delegate:nil
-//                                              cancelButtonTitle:@"知道了"
-//                                              otherButtonTitles:nil];
-//        [alert show];
+    } authorizationFailure:^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                        message:@"请在iPhone的“设置-隐私-通讯录”选项中，允许好运来访问您的通讯录"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"知道了"
+                                              otherButtonTitles:nil];
+        [alert show];
     }];
 }
 
@@ -83,9 +93,27 @@
     return [self.contactPeopleDict[key] count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return self.keys[section];
+    return 30;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [UIView new];
+    view.backgroundColor = [UIColor whiteColor];
+    
+    UILabel *lable = [UILabel labelWithText:self.keys[section]
+                                       font:[UIFont systemFontOfSize:font_14]
+                                  textColor:[UIColor jk_colorWithHexString:COLOR_242424]
+                                  alignment:NSTextAlignmentLeft];
+    [view addSubview:lable];
+    [lable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(view).offset(16);
+        make.centerY.equalTo(view);
+    }];
+    
+    return view;
 }
 
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView
@@ -93,20 +121,22 @@
     return self.keys;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 54;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *reuseIdentifier = @"cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
-    }
+    AddressBookCell *cell = [AddressBookCell cellWithCollectionView:tableView];
     NSString *key = self.keys[indexPath.section];
     PPPersonModel *people = [self.contactPeopleDict[key] objectAtIndex:indexPath.row];
-    cell.imageView.image = people.headerImage ? people.headerImage : [UIImage imageNamed:@"book_address_default"];
-    cell.imageView.clipsToBounds = YES;
-    cell.textLabel.text = people.name;
-    
+    [cell loadViewWithName:people.name image:people.headerImage ? people.headerImage : [UIImage imageNamed:@"mange_detail_connect"]];
     return cell;
 }
 

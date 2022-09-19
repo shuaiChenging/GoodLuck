@@ -6,9 +6,9 @@
 //
 
 #import "PersonalCenterHeaderView.h"
+#import "LoginInfoManage.h"
 @interface PersonalCenterHeaderView ()
 @property (nonatomic, strong) UIImageView *iconImg;
-@property (nonatomic, strong) UILabel *nameLb;
 @end
 @implementation PersonalCenterHeaderView
 
@@ -17,7 +17,7 @@
     self = [super init];
     if (self)
     {
-        self.backgroundColor = [UIColor blueColor];
+        self.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
         [self customerUI];
     }
     return self;
@@ -27,8 +27,7 @@
 {
     if (!_iconImg)
     {
-        _iconImg = [UIImageView new];
-        _iconImg.backgroundColor = [UIColor grayColor];
+        _iconImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"personal_icon"]];
         _iconImg.layer.masksToBounds = YES;
         _iconImg.layer.cornerRadius = 30;
     }
@@ -39,12 +38,24 @@
 {
     if (!_nameLb)
     {
-        _nameLb = [UILabel labelWithText:@"111111"
+        _nameLb = [UILabel labelWithText:[LoginInfoManage shareInstance].personalResponse.name
                                     font:[UIFont systemFontOfSize:16]
                                textColor:[UIColor whiteColor]
                                alignment:NSTextAlignmentLeft];
     }
     return _nameLb;
+}
+
+- (UILabel *)phoneLb
+{
+    if (!_phoneLb)
+    {
+        _phoneLb = [UILabel labelWithText:[LoginInfoManage shareInstance].personalResponse.phone
+                                     font:[UIFont systemFontOfSize:font_14]
+                                textColor:[UIColor whiteColor]
+                                alignment:NSTextAlignmentLeft];
+    }
+    return _phoneLb;
 }
 
 - (void)customerUI
@@ -58,7 +69,13 @@
     [self addSubview:self.nameLb];
     [_nameLb mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.iconImg.mas_right).offset(20);
-        make.centerY.equalTo(self.iconImg);
+        make.top.equalTo(self.iconImg).offset(8);
+    }];
+    
+    [self addSubview:self.phoneLb];
+    [_phoneLb mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.nameLb);
+        make.bottom.equalTo(self.iconImg.mas_bottom).offset(-8);
     }];
 }
 

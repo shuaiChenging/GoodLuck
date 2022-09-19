@@ -11,6 +11,8 @@
 @property (nonatomic, strong) UILabel *leftLb;
 @property (nonatomic, strong) UILabel *rightLb;
 @property (nonatomic, strong) NSArray *dataArr;
+@property (nonatomic, strong) UIImageView *leftCloseImg;
+@property (nonatomic, strong) UIImageView *rightCloseImg;
 @end
 @implementation WorkManageCell
 
@@ -26,6 +28,26 @@
     return self;
 }
 
+- (UIImageView *)leftCloseImg
+{
+    if (!_leftCloseImg)
+    {
+        _leftCloseImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_arrow_close"]];
+        _leftCloseImg.hidden = YES;
+    }
+    return _leftCloseImg;
+}
+
+- (UIImageView *)rightCloseImg
+{
+    if (!_rightCloseImg)
+    {
+        _rightCloseImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_arrow_close"]];
+        _rightCloseImg.hidden = YES;
+    }
+    return _rightCloseImg;
+}
+
 - (UILabel *)leftLb
 {
     if (!_leftLb)
@@ -35,7 +57,7 @@
                                textColor:[UIColor blackColor]
                                alignment:NSTextAlignmentCenter];
         _leftLb.userInteractionEnabled = YES;
-        _leftLb.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _leftLb.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
     }
     return _leftLb;
 }
@@ -49,7 +71,7 @@
                                 textColor:[UIColor blackColor]
                                 alignment:NSTextAlignmentCenter];
         _rightLb.userInteractionEnabled = YES;
-        _rightLb.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _rightLb.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
     }
     return _rightLb;
 }
@@ -74,6 +96,13 @@
         make.top.equalTo(self.contentView).offset(6);
     }];
     
+    [self.leftLb addSubview:self.leftCloseImg];
+    [_leftCloseImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.leftLb).offset(4);
+        make.right.equalTo(self.leftLb).offset(-4);
+        make.width.height.equalTo(8);
+    }];
+    
     [self.contentView addSubview:self.rightLb];
     [_rightLb jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
         [weakself handleClick:1];
@@ -83,6 +112,13 @@
         make.top.equalTo(self.leftLb);
         make.height.equalTo(40);
         make.right.equalTo(self.contentView).offset(-16);
+    }];
+    
+    [self.rightLb addSubview:self.rightCloseImg];
+    [_rightCloseImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.rightLb).offset(4);
+        make.right.equalTo(self.rightLb).offset(-4);
+        make.width.height.equalTo(8);
     }];
 }
 
@@ -122,14 +158,14 @@
     {
         WorkConfigManageResponse *response = array.firstObject;
         self.leftLb.text = response.name;
-        _leftLb.backgroundColor = response.isSelected ? [UIColor redColor] : [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _leftCloseImg.hidden = !response.isSelected;
     }
     
     if (array.count > 1)
     {
         WorkConfigManageResponse *response = array.lastObject;
         self.rightLb.text = response.name;
-        _rightLb.backgroundColor = response.isSelected ? [UIColor redColor] : [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _rightCloseImg.hidden = !response.isSelected;
     }
     _leftLb.hidden = array.count == 0;
     _rightLb.hidden = array.count < 2;

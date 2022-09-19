@@ -47,7 +47,27 @@ typedef enum {
     ZTC, /// 渣土场
     Fall, /// 自倒
     CarTeam, /// 车队
-    Backhoe /// 挖机
+    Discharged,/// 放行记录
 } WorkDataType;
+
+typedef enum {
+    All, /// 全部
+    ZCField, /// 渣土场
+    ZFall, /// 自倒
+    Error, /// 异常
+    Deleted /// 已删除
+    
+} StatisticsType;
+
+typedef enum {
+    AllType, /// 全部
+    DeletedType /// 已删除
+} OrderDeleteType;
+
+typedef enum {
+    Today, /// 今天
+    YesterDay, /// 昨天
+    SevenDay /// 七天
+} DataSeletedType;
 
 #endif /* EnumDefine_h */

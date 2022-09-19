@@ -11,6 +11,8 @@
 #import "MemberManageFooterView.h"
 #import "ChangeMemberVC.h"
 #import "MemberManageResponse.h"
+#import "AddressBookVC.h"
+#import "BaseNavigationVC.h"
 @interface MemberManageVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray *sources;
@@ -32,59 +34,23 @@
     ManageResponse *admi = [ManageResponse new];
     admi.header = [[MemberHeaderResponse alloc] initWithName:@"工地管理员" describe:@"负责登记泥头车进出工地"];
     admi.content = @[];
-    
-    ManageResponse *boss = [ManageResponse new];
-    boss.header = [[MemberHeaderResponse alloc] initWithName:@"泥头车老板" describe:@"负责提供拉土车辆的老板"];
-    boss.content = @[];
-    
-    self.sources = @[admi, boss];
+    self.sources = @[admi];
 }
 
 - (void)getData
 {
     WeakSelf(self)
-    RACSignal *bossSignal = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
-        GetRequest *request = [[GetRequest alloc] initWithRequestUrl:listboss argument:@{@"projectId":self.projectId}];
-        [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
-            if (success)
-            {
-                NSArray *array = [MemberManageResponse mj_objectArrayWithKeyValuesArray:result[@"data"]];
-                ManageResponse *resonse = weakself.sources[1];
-                resonse.content = array;
-            }
-            [subscriber sendNext:@"1"];
-            [subscriber sendCompleted];
-        } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
-            [subscriber sendNext:@"1"];
-            [subscriber sendCompleted];
-        }];
-        return [RACDisposable disposableWithBlock:^{
-            NSLog(@"结束了");
-        }];
-    }];
-    
-    RACSignal *adminSingal = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
-        GetRequest *request = [[GetRequest alloc] initWithRequestUrl:listAdmin argument:@{@"projectId":self.projectId}];
-        [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
-            if (success)
-            {
-                NSArray *array = [MemberManageResponse mj_objectArrayWithKeyValuesArray:result[@"data"]];
-                ManageResponse *resonse = weakself.sources[0];
-                resonse.content = array;
-            }
-            [subscriber sendNext:@"1"];
-            [subscriber sendCompleted];
-        } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
-            [subscriber sendNext:@"1"];
-            [subscriber sendCompleted];
-        }];
-        return [RACDisposable disposableWithBlock:^{
-            NSLog(@"结束了");
-        }];
-    }];
-    
-    [[RACSignal combineLatest:@[bossSignal,adminSingal]] subscribeNext:^(RACTuple * _Nullable x) {
-        [weakself.tableView reloadData];
+    GetRequest *request = [[GetRequest alloc] initWithRequestUrl:listAdmin argument:@{@"projectId":self.projectId}];
+    [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
+        if (success)
+        {
+            NSArray *array = [MemberManageResponse mj_objectArrayWithKeyValuesArray:result[@"data"]];
+            ManageResponse *resonse = weakself.sources[0];
+            resonse.content = array;
+            [weakself.tableView reloadData];
+        }
+    } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
+
     }];
 }
 
@@ -104,7 +70,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableHeaderView = [self hearderView];
-        _tableView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _tableView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerClass:MemberManageCell.class forCellReuseIdentifier:NSStringFromClass(MemberManageCell.class)];
     }
@@ -114,15 +80,26 @@
 - (UIView *)hearderView
 {
     UIView *view = [UIView new];
-    view.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
-    view.frame = CGRectMake(0, 0, kScreenWidth, 20);
+    view.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
+    view.frame = CGRectMake(0, 0, kScreenWidth, 16);
     return view;
 }
 
-- (void)addAdmin
+- (void)presentAddressBookVC
+{
+    AddressBookVC *addressBookVC = [AddressBookVC new];
+    WeakSelf(self)
+    [addressBookVC.subject subscribeNext:^(id  _Nullable x) {
+        [weakself addAdmin:x];
+    }];
+    BaseNavigationVC *addressNavi = [[BaseNavigationVC alloc] initWithRootViewController:addressBookVC];
+    [self presentViewController:addressNavi animated:YES completion:nil];
+}
+
+- (void)addAdmin:(NSString *)phone
 {
     WeakSelf(self)
-    PostRequest *request = [[PostRequest alloc] initWithRequestUrl:projectaddadmin argument:@{@"projectId":self.projectId,@"phone":@"18506223058"}];
+    PostRequest *request = [[PostRequest alloc] initWithRequestUrl:projectaddadmin argument:@{@"projectId":self.projectId,@"phone":phone}];
     [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
         if (success)
         {
@@ -159,32 +136,15 @@
 {
     MemberManageFooterView *footerView = [MemberManageFooterView new];
     WeakSelf(self)
-    [footerView.addView jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-        if (section == 0)
-        {
-            [weakself addAdmin];
-        }
-        else
-        {
-            
-        }
-    }];
-    [footerView.inviteView jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-        if (section == 0)
-        {
-            
-        }
-        else
-        {
-            
-        }
+    [footerView jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        [weakself presentAddressBookVC];
     }];
     return footerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 70;
+    return 54;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -217,7 +177,7 @@
     MemberManageCell *cell = [MemberManageCell cellWithCollectionView:tableView];
     ManageResponse *response = self.sources[indexPath.section];
     MemberManageResponse *model = response.content[indexPath.row];
-    [cell setImageName:@"" name:model.name];
+    [cell setImageName:@"home_seleted_admin" name:model.name];
     return cell;
 }
 

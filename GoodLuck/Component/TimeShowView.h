@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TimeShowView : UIView
-
+@property (nonatomic, strong) UILabel *timeLb;
 @end
 
 NS_ASSUME_NONNULL_END

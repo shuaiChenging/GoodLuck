@@ -27,7 +27,7 @@
 
 - (void)registerInit
 {
-    self.time = 10;
+    self.time = 60;
     RAC(self.registerVM,account) = self.registerView.accountTF.textField.rac_textSignal;
     RAC(self.registerVM,code) = self.registerView.codeTF.textField.rac_textSignal;
     RAC(self.registerVM,setPassword) = self.registerView.passwordTF.textField.rac_textSignal;
@@ -37,21 +37,51 @@
     @weakify(self);
     [self.registerVM.btnEnableSignal subscribeNext:^(id  _Nullable x) {
         @strongify(self);
-        [self.registerView.button setBackgroundColor:[x boolValue] ? [UIColor blueColor] : [UIColor grayColor]];
+        [self.registerView.button setBackgroundColor:[x boolValue] ? [UIColor jk_colorWithHexString:COLOR_BLUE] : [UIColor jk_colorWithHexString:COLOR_94BCF7]];
+    }];
+    
+    [self.registerView.accountTF.textField.rac_textSignal subscribeNext:^(NSString * _Nullable x) {
+        @strongify(self);
+        if (x.length > 11)
+        {
+            self.registerView.accountTF.textField.text = [x substringToIndex:11];
+        }
+    }];
+    
+    [self.registerVM.sendCodeCommand.executionSignals.switchToLatest subscribeNext:^(id  _Nullable x) {
+        @strongify(self);
+        [self codeBtHandle];
+        [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"短信发送成功"];
     }];
     
     [self.registerVM.loginCommand.executionSignals.switchToLatest subscribeNext:^(id  _Nullable x) {
-        NSLog(@"登录成功，跳转页面");
+        @strongify(self);
+        [self.navigationController popViewControllerAnimated:YES];
+        [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"注册成功"];
     }];
     
     [[self.registerView.button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
         @strongify(self);
+        if (!self.registerView.isSeleted)
+        {
+            [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"请勾选同意用户协议"];
+            return;
+        }
         [self.registerVM.loginCommand execute:@{@"phoneNo":self.registerView.accountTF.textField.text,@"code":self.registerView.codeTF.textField.text,@"password":self.registerView.passwordTF.textField.text,@"rePassword":self.registerView.rePasswordTF.textField.text}];
     }];
     
     [[self.registerView.codeTF.sendCode rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
         @strongify(self);
-        [self codeBtHandle];
+        if ([Tools isEmpty:self.registerView.accountTF.textField.text])
+        {
+            [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"请输入手机号！"];
+            return;
+        }
+        else if (self.registerView.accountTF.textField.text.length != 11)
+        {
+            [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"请输入正确的手机号！"];
+            return;
+        }
         [self.registerVM.sendCodeCommand execute:@{@"phoneNo":self.registerView.accountTF.textField.text}];
     }];
     
@@ -76,7 +106,7 @@
         else
         {
             [self.disposable dispose];
-            self.time = 10;
+            self.time = 60;
             [self.registerView.codeTF.sendCode setTitle:@"重新发送" forState:UIControlStateNormal];
             self.registerView.codeTF.sendCode.enabled = YES;
         }

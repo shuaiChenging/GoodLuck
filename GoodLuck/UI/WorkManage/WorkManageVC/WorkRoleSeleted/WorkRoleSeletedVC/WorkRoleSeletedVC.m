@@ -44,12 +44,12 @@
     }
     
     RoleModel *bossModel = [RoleModel new];
-    bossModel.imageName = @"";
+    bossModel.imageName = @"home_seleted_boss";
     bossModel.name = @"工地老板";
     bossModel.isSeleted = [roleType isEqualToString:@"1"];
     
     RoleModel *manageModel = [RoleModel new];
-    manageModel.imageName = @"";
+    manageModel.imageName = @"home_seleted_admin";
     manageModel.name = @"工地管理员";
     manageModel.isSeleted = [roleType isEqualToString:@"2"];
     
@@ -64,8 +64,8 @@
 - (void)customerUI
 {
     UILabel *descrbeLb = [UILabel labelWithText:@"请选择您在工作中的角色"
-                                           font:[UIFont boldSystemFontOfSize:16]
-                                      textColor:[UIColor jk_colorWithHexString:@"#666666"]
+                                           font:[UIFont boldSystemFontOfSize:font_16]
+                                      textColor:[UIColor jk_colorWithHexString:COLOR_7F7F7F]
                                       alignment:NSTextAlignmentCenter];
     [self.view addSubview:descrbeLb];
     [descrbeLb mas_makeConstraints:^(MASConstraintMaker *make) {

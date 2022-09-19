@@ -28,7 +28,7 @@
     {
         _bossLine = [UIView new];
         _bossLine.hidden = YES;
-        _bossLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _bossLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     }
     return _bossLine;
 }
@@ -39,8 +39,8 @@
     {
         _bossInput = [InfoInputMiddleCompent new];
         _bossInput.textField.keyboardType = UIKeyboardTypeNumberPad;
-        [_bossInput setName:@"老板手机" placeholder:@"移动电话号码" imageName:@"1"];
-        _bossInput.textField.text = @"15995754057";
+        [_bossInput setName:@"老板手机" placeholder:@"移动电话号码" imageName:@"home_connect"];
+//        _bossInput.textField.text = @"15995754057";
     }
     return _bossInput;
 }
@@ -71,7 +71,7 @@
 - (void)customerUI
 {
     UIView *firstLine = [UIView new];
-    firstLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    firstLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self addSubview:firstLine];
     [firstLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
@@ -89,8 +89,8 @@
     }];
 
     UILabel *nameLb = [UILabel labelWithText:@"请输入工地老板手机号"
-                                        font:[UIFont systemFontOfSize:15]
-                                   textColor:[UIColor blueColor]
+                                        font:[UIFont systemFontOfSize:font_14]
+                                   textColor:[UIColor jk_colorWithHexString:COLOR_BLUE]
                                    alignment:NSTextAlignmentLeft];
     [nameView addSubview:nameLb];
     [nameLb mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -99,7 +99,7 @@
     }];
 
     UIView *secondLine = [UIView new];
-    secondLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    secondLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self addSubview:secondLine];
     [secondLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
@@ -129,7 +129,7 @@
     }];
 
     UIView *thirdLine = [UIView new];
-    thirdLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    thirdLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self addSubview:thirdLine];
     [thirdLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
@@ -145,7 +145,7 @@
     }];
 
     UIView *fourthLime = [UIView new];
-    fourthLime.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    fourthLime.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self addSubview:fourthLime];
     [fourthLime mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);

@@ -12,4 +12,10 @@ typedef void (^AddCompentBack)(NSString *);
 
 typedef void (^ManageDelete)(NSString *);
 
+typedef void (^SeletedChange)(NSString *);
+
+typedef void (^CardCallback)(NSString *);
+
+
+
 #endif /* TypeDefDefine_h */

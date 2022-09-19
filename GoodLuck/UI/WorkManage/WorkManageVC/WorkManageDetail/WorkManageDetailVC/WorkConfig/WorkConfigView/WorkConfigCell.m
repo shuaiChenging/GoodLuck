@@ -35,7 +35,7 @@
     {
         _nameLb = [UILabel labelWithText:@"账号与安全"
                                     font:[UIFont systemFontOfSize:15]
-                               textColor:[UIColor blackColor]
+                               textColor:[UIColor jk_colorWithHexString:COLOR_242424]
                                alignment:NSTextAlignmentLeft];
     }
     return _nameLb;
@@ -58,7 +58,7 @@
     }];
     
     UIView *lineView = [UIView new];
-    lineView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    lineView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.contentView addSubview:lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.contentView);

@@ -22,7 +22,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        self.contentView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        self.contentView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
         [self customerUI];
     }
     
@@ -39,9 +39,9 @@
 {
     if (!_serialLeftLb)
     {
-        _serialLeftLb = [UILabel labelWithText:@"1"
+        _serialLeftLb = [UILabel labelWithText:@""
                                           font:[UIFont systemFontOfSize:12]
-                                     textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                     textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                      alignment:NSTextAlignmentLeft];
     }
     return _serialLeftLb;
@@ -51,9 +51,9 @@
 {
     if (!_numberLeftLb)
     {
-        _numberLeftLb = [UILabel labelWithText:@"浙A23344"
+        _numberLeftLb = [UILabel labelWithText:@""
                                           font:[UIFont systemFontOfSize:12]
-                                     textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                     textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                      alignment:NSTextAlignmentCenter];
     }
     return _numberLeftLb;
@@ -63,9 +63,9 @@
 {
     if (!_workNoLeftLb)
     {
-        _workNoLeftLb = [UILabel labelWithText:@"1"
+        _workNoLeftLb = [UILabel labelWithText:@""
                                           font:[UIFont systemFontOfSize:12]
-                                     textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                     textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                      alignment:NSTextAlignmentRight];
     }
     return _workNoLeftLb;
@@ -75,9 +75,9 @@
 {
     if (!_serialRightLb)
     {
-        _serialRightLb = [UILabel labelWithText:@"1"
+        _serialRightLb = [UILabel labelWithText:@""
                                            font:[UIFont systemFontOfSize:12]
-                                      textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                      textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                       alignment:NSTextAlignmentLeft];
     }
     return _serialRightLb;
@@ -87,9 +87,9 @@
 {
     if (!_numberRightLb)
     {
-        _numberRightLb = [UILabel labelWithText:@"浙A23344"
+        _numberRightLb = [UILabel labelWithText:@""
                                            font:[UIFont systemFontOfSize:12]
-                                      textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                      textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                       alignment:NSTextAlignmentCenter];
     }
     return _numberRightLb;
@@ -99,9 +99,9 @@
 {
     if (!_workNoRightLb)
     {
-        _workNoRightLb = [UILabel labelWithText:@"1"
+        _workNoRightLb = [UILabel labelWithText:@""
                                            font:[UIFont systemFontOfSize:12]
-                                      textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                      textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                       alignment:NSTextAlignmentRight];
     }
     return _workNoRightLb;
@@ -119,6 +119,17 @@
     }];
     
     UIView *leftView = [UIView new];
+    leftView.userInteractionEnabled = YES;
+    WeakSelf(self)
+    [leftView jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        if (![Tools isEmpty:weakself.numberLeftLb.text])
+        {
+            if (weakself.callback)
+            {
+                weakself.callback(weakself.numberLeftLb.text);
+            }
+        }
+    }];
     [backView addSubview:leftView];
     [leftView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.top.bottom.equalTo(backView);
@@ -126,6 +137,16 @@
     }];
     
     UIView *rightView = [UIView new];
+    rightView.userInteractionEnabled = YES;
+    [rightView jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        if (![Tools isEmpty:weakself.numberRightLb.text])
+        {
+            if (weakself.callback)
+            {
+                weakself.callback(weakself.numberRightLb.text);
+            }
+        }
+    }];
     [backView addSubview:rightView];
     [rightView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(backView.mas_centerX);
@@ -150,7 +171,7 @@
     }];
     
     UIView *middleView = [UIView new];
-    middleView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    middleView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [backView addSubview:middleView];
     [middleView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(0.5);
@@ -176,13 +197,35 @@
     }];
     
     UIView *bottomView = [UIView new];
-    bottomView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    bottomView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [backView addSubview:bottomView];
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(backView);
         make.height.equalTo(0.5);
     }];
     
+}
+
+- (void)loadViewWithArray:(NSArray *)array indexRow:(int)indexRow
+{
+    
+    if (array.count > 0)
+    {
+        self.serialLeftLb.text = [NSString stringWithFormat:@"%d",indexRow * 2 + 1];
+        self.numberLeftLb.text = array.firstObject[@"plateNumber"];
+        self.workNoLeftLb.text = [NSString stringWithFormat:@"%@",array.firstObject[@"orderCount"]];
+        
+        self.serialRightLb.text = @"";
+        self.numberRightLb.text = @"";
+        self.workNoRightLb.text = @"";
+    }
+    
+    if (array.count > 1)
+    {
+        self.serialRightLb.text = [NSString stringWithFormat:@"%d",indexRow * 2 + 2];
+        self.numberRightLb.text = array.lastObject[@"plateNumber"];
+        self.workNoRightLb.text = [NSString stringWithFormat:@"%@",array.lastObject[@"orderCount"]];
+    }
 }
 
 @end

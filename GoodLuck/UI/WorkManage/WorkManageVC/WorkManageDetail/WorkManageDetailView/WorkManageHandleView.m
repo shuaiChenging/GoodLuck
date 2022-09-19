@@ -24,7 +24,7 @@
     if (!_infoView)
     {
         _infoView = [IconNameView new];
-        [_infoView setImageName:@"" name:@"详细信息"];
+        [_infoView setImageName:@"mange_detail_info" name:@"详细信息"];
     }
     return _infoView;
 }
@@ -34,7 +34,7 @@
     if (!_memberView)
     {
         _memberView = [IconNameView new];
-        [_memberView setImageName:@"" name:@"人员管理"];
+        [_memberView setImageName:@"manage_detail_people" name:@"人员管理"];
     }
     return _memberView;
 }
@@ -44,7 +44,7 @@
     if (!_roleView)
     {
         _roleView = [IconNameView new];
-        [_roleView setImageName:@"" name:@"角色审批"];
+        [_roleView setImageName:@"manage_detail_role" name:@"角色审批"];
     }
     return _roleView;
 }
@@ -54,7 +54,7 @@
     if (!_workOrderView)
     {
         _workOrderView = [IconNameView new];
-        [_workOrderView setImageName:@"" name:@"工单审批"];
+        [_workOrderView setImageName:@"manage_detail_order" name:@"工单审批"];
     }
     return _workOrderView;
 }

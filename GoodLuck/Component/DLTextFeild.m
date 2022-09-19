@@ -8,10 +8,10 @@
 #import "DLTextFeild.h"
 
 @interface DLTextFeild ()
-
-
 @property (nonatomic, strong) UILabel *phoneLb;
 @property (nonatomic, strong) UIView *phoneLine;
+@property (nonatomic, strong) GLImageView *passwordImg;
+@property (nonatomic, assign) BOOL isOpen;
 @end
 @implementation DLTextFeild
 
@@ -20,7 +20,7 @@
     self = [super init];
     if (self)
     {
-//        self.backgroundColor = [UIColor orangeColor];
+        self.isOpen = NO;
         [self customerUI:type];
     }
     return self;
@@ -31,12 +31,23 @@
     if (!_phoneLb)
     {
         _phoneLb = [UILabel labelWithText:@"+86"
-                                     font:[UIFont systemFontOfSize:16]
-                                textColor:[UIColor blueColor]
+                                     font:[UIFont systemFontOfSize:font_16]
+                                textColor:[UIColor jk_colorWithHexString:COLOR_BLUE]
                                 alignment:NSTextAlignmentLeft];
         _phoneLb.hidden = YES;
     }
     return _phoneLb;
+}
+
+- (GLImageView *)passwordImg
+{
+    if (!_passwordImg)
+    {
+        _passwordImg = [[GLImageView alloc] initWithImage:[UIImage imageNamed:@"login_eye_close"]];
+        _passwordImg.userInteractionEnabled = YES;
+        _passwordImg.hidden = YES;
+    }
+    return _passwordImg;
 }
 
 - (UIView *)phoneLine
@@ -45,7 +56,7 @@
     {
         _phoneLine = [UIView new];
         _phoneLine.hidden = YES;
-        _phoneLine.backgroundColor = [UIColor jk_colorWithHexString:@"#cccccc"];
+        _phoneLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LOGIN_LINE];
     }
     return _phoneLine;
 }
@@ -56,9 +67,9 @@
     {
         _sendCode = [DLButton buttonWithType:UIButtonTypeCustom];
         [_sendCode setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [_sendCode.titleLabel setFont:[UIFont systemFontOfSize:14]];
+        [_sendCode.titleLabel setFont:[UIFont systemFontOfSize:font_14]];
         _sendCode.layer.cornerRadius = 15;
-        _sendCode.backgroundColor = [UIColor blueColor];
+        _sendCode.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
         _sendCode.hidden = YES;
     }
     return _sendCode;
@@ -69,8 +80,8 @@
     if (!_textField)
     {
         _textField = [UITextField new];
-        _textField.textColor = [UIColor jk_colorWithHexString:@"666666"];
-        _textField.font = [UIFont systemFontOfSize:18];
+        _textField.textColor = [UIColor jk_colorWithHexString:COLOR_242424];
+        _textField.font = [UIFont systemFontOfSize:font_16];
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _textField;
@@ -85,11 +96,25 @@
     }];
     
     UIView *line = [UIView new];
-    line.backgroundColor = [UIColor jk_colorWithHexString:@"#cccccc"];
+    line.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LOGIN_LINE];
     [self addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
         make.left.right.bottom.equalTo(self);
+    }];
+    
+    [self addSubview:self.passwordImg];
+    WeakSelf(self)
+    [_passwordImg jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        weakself.isOpen = !weakself.isOpen;
+        weakself.textField.secureTextEntry = !weakself.isOpen;
+        weakself.passwordImg.image = [UIImage imageNamed:weakself.isOpen ? @"login_eye_open" : @"login_eye_close"];
+    }];
+    [_passwordImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(20);
+        make.height.equalTo(13);
+        make.right.equalTo(-16);
+        make.centerY.equalTo(self);
     }];
     
     [self addSubview:self.phoneLb];
@@ -126,16 +151,23 @@
         case PasswordInput:
         {
             placeholderStr = @"请输入密码";
+            _passwordImg.hidden = NO;
+            _textField.secureTextEntry = YES;
+            [_textField mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.right.equalTo(self).offset(-16 - 6 - 20);
+            }];
             break;
         }
         case SetPasswordInput:
         {
             placeholderStr = @"请设置6-20位登录密码";
+            _textField.secureTextEntry = YES;
             break;
         }
         case ReSetPasswordInput:
         {
             placeholderStr = @"请再次输入新的登录密码";
+            _textField.secureTextEntry = YES;
             break;
         }
         case PhoneInput:

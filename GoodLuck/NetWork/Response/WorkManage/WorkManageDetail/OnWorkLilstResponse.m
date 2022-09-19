@@ -8,5 +8,8 @@
 #import "OnWorkLilstResponse.h"
 
 @implementation OnWorkLilstResponse
-
++ (NSDictionary *)mj_replacedKeyFromPropertyName
+{
+    return @{@"tenantId":@"id"};
+}
 @end

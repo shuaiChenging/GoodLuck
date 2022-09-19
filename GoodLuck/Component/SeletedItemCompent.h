@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) RACSubject *subject;
 - (instancetype)initWithArray:(NSArray *)array;
 - (instancetype)initScrollWithArray:(NSArray *)array;
-
+- (instancetype)initDetailScrollWithArray:(NSArray *)array;
+- (void)seletedHandle:(int)index;
 @end
 
 NS_ASSUME_NONNULL_END

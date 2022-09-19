@@ -10,8 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MemberManageFooterView : UIView
-@property (nonatomic, strong) UIView *addView;
-@property (nonatomic, strong) UIView *inviteView;
+
 @end
 
 NS_ASSUME_NONNULL_END

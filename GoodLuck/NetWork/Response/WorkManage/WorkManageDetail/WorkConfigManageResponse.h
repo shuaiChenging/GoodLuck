@@ -12,8 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WorkConfigManageResponse : BaseResponse
 @property (nonatomic, copy) NSString *workId;
 @property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *createBy;
 @property (nonatomic, copy) NSString *projectId;
 @property (nonatomic, assign) BOOL isSelected;
+@property (nonatomic, copy) NSString *status;
 @end
 
 NS_ASSUME_NONNULL_END

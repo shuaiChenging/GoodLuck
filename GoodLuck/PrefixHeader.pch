@@ -7,7 +7,15 @@
 
 #ifndef PrefixHeader_pch
 #define PrefixHeader_pch
+
+#ifdef __cplusplus
+#import <opencv2/opencv.hpp>
+#endif
+
+#ifdef __OBJC__
 #import "Config.h"
+#import <SVProgressHUD/SVProgressHUD.h>
+#import "ColorFontConfig.h"
 #import "UrlDefine.h"
 #import "EnumDefine.h"
 #import "TypeDefDefine.h"
@@ -19,9 +27,18 @@
 #import "UILabel+Extent.h"
 #import "GetRequest.h"
 #import "PostRequest.h"
+#import "PostImgRequest.h"
 #import "ExpendImageView.h"
 #import "Tools.h"
 #import "DDDataStorageManage.h"
+#import "SDWebImage.h"
+#import "GLImageView.h"
+#import "GLTextField.h"
+#import "GLTableView.h"
+
+#endif
+
+
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 

@@ -30,18 +30,35 @@
 
 - (void)phoneLoginInit
 {
-    self.time = 10;
+    self.time = 60;
     RAC(self.phoneLoginVM,account) = self.phoneLoginView.accountTF.textField.rac_textSignal;
     RAC(self.phoneLoginVM,code) = self.phoneLoginView.codeTF.textField.rac_textSignal;
     RAC(self.phoneLoginView.button,enabled) = self.phoneLoginVM.btnEnableSignal;
+    
     @weakify(self);
     [self.phoneLoginVM.btnEnableSignal subscribeNext:^(id  _Nullable x) {
         @strongify(self);
-        [self.phoneLoginView.button setBackgroundColor:[x boolValue] ? [UIColor blueColor] : [UIColor grayColor]];
+        [self.phoneLoginView.button setBackgroundColor:[x boolValue] ? [UIColor jk_colorWithHexString:COLOR_BLUE] : [UIColor jk_colorWithHexString:COLOR_94BCF7]];
+    }];
+    
+    [self.phoneLoginView.accountTF.textField.rac_textSignal subscribeNext:^(NSString * _Nullable x) {
+        @strongify(self);
+        if (x.length > 11)
+        {
+            self.phoneLoginView.accountTF.textField.text = [x substringToIndex:11];
+        }
+    }];
+    
+    [self.phoneLoginVM.sendCodeCommand.executionSignals.switchToLatest subscribeNext:^(id  _Nullable x) {
+        @strongify(self);
+        [self codeBtHandle];
+        [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"短信发送成功"];
     }];
     
     [self.phoneLoginVM.loginCommand.executionSignals.switchToLatest subscribeNext:^(id  _Nullable x) {
         [[[UIApplication sharedApplication] delegate] performSelector:@selector(tabbarMainView)];
+        
+//        [((AppDelegate *)[UIApplication sharedApplication].delegate) tabbarMainView];
     }];
     
     [[self.phoneLoginView.button rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
@@ -51,14 +68,23 @@
     
     [[self.phoneLoginView.codeTF.sendCode rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
         @strongify(self);
-        [self codeBtHandle];
+        if ([Tools isEmpty:self.phoneLoginView.accountTF.textField.text])
+        {
+            [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"请输入手机号！"];
+            return;
+        }
+        else if (self.phoneLoginView.accountTF.textField.text.length != 11)
+        {
+            [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"请输入正确的手机号！"];
+            return;
+        }
+        
         [self.phoneLoginVM.sendCodeCommand execute:@{@"phoneNo":self.phoneLoginView.accountTF.textField.text}];
     }];
     
     [self.phoneLoginView.accountLoginLb jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
         @strongify(self);
-        AccountLoginVC *accountLoginVC = [AccountLoginVC new];
-        [self.navigationController pushViewController:accountLoginVC animated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }];
     
     [self.phoneLoginView.registLb jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
@@ -82,7 +108,7 @@
         else
         {
             [self.disposable dispose];
-            self.time = 10;
+            self.time = 60;
             [self.phoneLoginView.codeTF.sendCode setTitle:@"重新发送" forState:UIControlStateNormal];
             self.phoneLoginView.codeTF.sendCode.enabled = YES;
         }
@@ -113,6 +139,7 @@
     [_phoneLoginView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
+    
 }
 
 @end

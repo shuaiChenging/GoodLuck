@@ -47,8 +47,8 @@
     if (!_describeLb)
     {
         _describeLb = [UILabel labelWithText:@"账号与安全"
-                                        font:[UIFont systemFontOfSize:15]
-                                   textColor:[UIColor blueColor]
+                                        font:[UIFont systemFontOfSize:font_14]
+                                   textColor:[UIColor jk_colorWithHexString:COLOR_BLUE]
                                    alignment:NSTextAlignmentRight];
     }
     return _describeLb;
@@ -77,7 +77,7 @@
     }];
     
     UIView *lineView = [UIView new];
-    lineView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    lineView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.contentView addSubview:lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.contentView);

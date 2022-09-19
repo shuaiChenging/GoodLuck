@@ -9,6 +9,7 @@
 @interface RoleView ()
 @property (nonatomic, strong) UIImageView *iconImg;
 @property (nonatomic, strong) UILabel *nameLb;
+@property (nonatomic, strong) UIImageView *seletedImg;
 @end
 @implementation RoleView
 
@@ -22,12 +23,21 @@
     return self;
 }
 
+- (UIImageView *)seletedImg
+{
+    if (!_seletedImg)
+    {
+        _seletedImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"manage_detail_seleted"]];
+        _seletedImg.hidden = YES;
+    }
+    return _seletedImg;
+}
+
 - (UIImageView *)iconImg
 {
     if (!_iconImg)
     {
         _iconImg = [UIImageView new];
-        _iconImg.backgroundColor = [UIColor grayColor];
     }
     return _iconImg;
 }
@@ -37,8 +47,8 @@
     if (!_nameLb)
     {
         _nameLb = [UILabel labelWithText:@"工地老板"
-                                    font:[UIFont systemFontOfSize:14]
-                                textColor:[UIColor jk_colorWithHexString:@"#666666"]
+                                    font:[UIFont systemFontOfSize:font_14]
+                                textColor:[UIColor jk_colorWithHexString:COLOR_7F7F7F]
                                alignment:NSTextAlignmentCenter];
     }
     return _nameLb;
@@ -48,14 +58,21 @@
 {
     [self addSubview:self.iconImg];
     [_iconImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(80);
+        make.width.height.equalTo(90);
         make.centerX.equalTo(self);
         make.top.equalTo(self);
     }];
     
+    [self addSubview:self.seletedImg];
+    [_seletedImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.equalTo(18);
+        make.right.equalTo(self.iconImg).offset(-6);
+        make.top.equalTo(self.iconImg);
+    }];
+    
     [self addSubview:self.nameLb];
     [_nameLb mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.iconImg.mas_bottom).offset(6);
+        make.top.equalTo(self.iconImg.mas_bottom).offset(20);
         make.centerX.equalTo(self);
     }];
 }
@@ -64,7 +81,9 @@
 {
     self.iconImg.image = image;
     self.nameLb.text = name;
-    self.nameLb.textColor = isSeleted ? [UIColor redColor] : [UIColor jk_colorWithHexString:@"#666666"];
+    self.iconImg.alpha = isSeleted ? 1.0 : 0.5;
+    self.seletedImg.hidden = !isSeleted;
+    self.nameLb.textColor = isSeleted ? [UIColor blackColor] : [UIColor jk_colorWithHexString:COLOR_7F7F7F];
 }
 
 @end

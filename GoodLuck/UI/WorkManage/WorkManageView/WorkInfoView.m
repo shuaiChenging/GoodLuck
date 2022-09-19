@@ -26,8 +26,8 @@
     if (!_numberLb)
     {
         _numberLb = [UILabel labelWithText:@"0"
-                                      font:[UIFont boldSystemFontOfSize:14]
-                                 textColor:[UIColor blueColor]
+                                      font:[UIFont boldSystemFontOfSize:font_16]
+                                 textColor:[UIColor jk_colorWithHexString:COLOR_BLUE]
                                  alignment:NSTextAlignmentCenter];
     }
     return _numberLb;
@@ -38,8 +38,8 @@
     if (!_itemLb)
     {
         _itemLb = [UILabel labelWithText:@"0"
-                                    font:[UIFont systemFontOfSize:12]
-                               textColor:[UIColor jk_colorWithHexString:@"#666666"]
+                                    font:[UIFont systemFontOfSize:font_12]
+                               textColor:[UIColor jk_colorWithHexString:COLOR_9B9B9B]
                                alignment:NSTextAlignmentCenter];
     }
     return _itemLb;

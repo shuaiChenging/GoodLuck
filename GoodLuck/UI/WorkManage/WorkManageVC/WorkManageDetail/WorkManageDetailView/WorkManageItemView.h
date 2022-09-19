@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WorkManageItemView : UIView
 @property (nonatomic, strong) UILabel *nameLb;
+@property (nonatomic, strong) UILabel *detailLb;
+@property (nonatomic, strong) UIImageView *arrowImg;
 @end
 
 NS_ASSUME_NONNULL_END

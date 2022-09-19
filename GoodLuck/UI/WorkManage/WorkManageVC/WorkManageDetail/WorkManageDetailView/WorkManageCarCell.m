@@ -21,7 +21,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        self.contentView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        self.contentView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
         [self customerUI];
     }
     
@@ -39,7 +39,7 @@
     if (!_image)
     {
         _image = [UIImageView new];
-        _image.backgroundColor = [UIColor grayColor];
+        _image.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
     }
     return _image;
 }
@@ -61,8 +61,8 @@
     if (!_allLb)
     {
         _allLb = [UILabel labelWithText:@"累计："
-                                   font:[UIFont systemFontOfSize:13]
-                              textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                   font:[UIFont systemFontOfSize:font_14]
+                              textColor:[UIColor jk_colorWithHexString:@"#989898"]
                               alignment:NSTextAlignmentLeft];
     }
     return _allLb;
@@ -74,7 +74,7 @@
     {
         _driveLb = [UILabel labelWithText:@"司机："
                                      font:[UIFont systemFontOfSize:12]
-                                textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                 alignment:NSTextAlignmentLeft];
     }
     return _driveLb;
@@ -85,8 +85,8 @@
     if (!_typeLb)
     {
         _typeLb = [UILabel labelWithText:@"自倒"
-                                    font:[UIFont systemFontOfSize:13]
-                               textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                                    font:[UIFont systemFontOfSize:font_14]
+                               textColor:[UIColor jk_colorWithHexString:COLOR_BLUE]
                                alignment:NSTextAlignmentLeft];
     }
     return _typeLb;
@@ -98,7 +98,7 @@
     {
         _timeLb = [UILabel labelWithText:@"时间"
                                     font:[UIFont systemFontOfSize:12]
-                               textColor:[UIColor jk_colorWithHexString:@"#333333"]
+                               textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                alignment:NSTextAlignmentLeft];
     }
     return _timeLb;
@@ -151,15 +151,26 @@
     [_timeLb mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(backView).offset(-16);
         make.bottom.equalTo(self.driveLb);
+        make.width.equalTo(120);
     }];
     
     UIView *bottomLine = [UIView new];
-    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [backView addSubview:bottomLine];
     [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
         make.left.bottom.right.equalTo(backView);
     }];
+}
+
+- (void)loadViewWithModel:(CarstatisticsItemResponse *)model
+{
+    [_image sd_setImageWithURL:[NSURL URLWithString:model.outCarHeaderImg]];
+    _carLb.text = model.plateNumber;
+    _allLb.text = [NSString stringWithFormat:@"累计:%@车",model.count];
+    _driveLb.text = [NSString stringWithFormat:@"司机:%@",model.driverName];
+    _typeLb.text = model.ztcName;
+    _timeLb.text = [NSString stringWithFormat:@"最后出场:%@",model.outTime];
 }
 
 @end

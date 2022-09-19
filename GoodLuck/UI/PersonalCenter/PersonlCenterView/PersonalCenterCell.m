@@ -28,8 +28,8 @@
     if (!_titleLb)
     {
         _titleLb = [UILabel labelWithText:@"账号与安全"
-                                     font:[UIFont systemFontOfSize:14]
-                                textColor:[UIColor blackColor]
+                                     font:[UIFont systemFontOfSize:font_14]
+                                textColor:[UIColor jk_colorWithHexString:COLOR_242424]
                                 alignment:NSTextAlignmentLeft];
     }
     return _titleLb;
@@ -43,8 +43,16 @@
         make.centerY.equalTo(self.contentView);
     }];
     
+    UIImageView *arrowImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"common_right_arrow"]];
+    [self.contentView addSubview:arrowImg];
+    [arrowImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.equalTo(16);
+        make.right.equalTo(self.contentView).offset(-16);
+        make.centerY.equalTo(self.contentView);
+    }];
+    
     UIView *lineView = [UIView new];
-    lineView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    lineView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.contentView addSubview:lineView];
     [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);

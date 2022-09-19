@@ -17,7 +17,7 @@
     self = [super init];
     if (self)
     {
-        self.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        self.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
         [self customerUI];
     }
     return self;
@@ -50,7 +50,7 @@
 - (void)customerUI
 {
     UIView *backView = [UIView new];
-    backView.backgroundColor = [UIColor blueColor];
+    backView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
     [self addSubview:backView];
     [backView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(16);

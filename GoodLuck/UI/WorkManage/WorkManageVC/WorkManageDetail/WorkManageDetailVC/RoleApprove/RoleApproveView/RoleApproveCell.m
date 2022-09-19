@@ -6,6 +6,7 @@
 //
 
 #import "RoleApproveCell.h"
+#import "LoginInfoManage.h"
 @interface RoleApproveCell ()
 @property (nonatomic, strong) UILabel *nameLb;
 @property (nonatomic, strong) UILabel *projectLb;
@@ -14,6 +15,8 @@
 @property (nonatomic, strong) UILabel *fromLb;
 @property (nonatomic, strong) UIButton *refuseBt;
 @property (nonatomic, strong) UIButton *agreeBt;
+@property (nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) RoleApproveResponse *roleAproveResponse;
 @end
 @implementation RoleApproveCell
 
@@ -22,7 +25,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        self.contentView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        self.contentView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
         [self customerUI];
     }
     
@@ -71,6 +74,15 @@
     return _describeLb;
 }
 
+- (RACSubject *)subject
+{
+    if (!_subject)
+    {
+        _subject = [RACSubject new];
+    }
+    return _subject;
+}
+
 - (UILabel *)applyTimeLb
 {
     if (!_applyTimeLb)
@@ -100,9 +112,14 @@
     if (!_refuseBt)
     {
         _refuseBt = [UIButton buttonWithType:UIButtonTypeCustom];
-        _refuseBt.backgroundColor = [UIColor redColor];
+        _refuseBt.backgroundColor = [UIColor whiteColor];
+        _refuseBt.layer.borderColor = [UIColor jk_colorWithHexString:COLOR_D2D3E0].CGColor;
+        [_refuseBt setTitleColor:[UIColor jk_colorWithHexString:COLOR_D2D3E0] forState:UIControlStateNormal];
+        _refuseBt.layer.borderWidth = 1;
         _refuseBt.layer.masksToBounds = YES;
         _refuseBt.layer.cornerRadius = 15;
+        [_refuseBt.titleLabel setFont:[UIFont systemFontOfSize:font_14]];
+        [_refuseBt setTitle:@"拒绝" forState:UIControlStateNormal];
     }
     return _refuseBt;
 }
@@ -112,9 +129,12 @@
     if (!_agreeBt)
     {
         _agreeBt = [UIButton buttonWithType:UIButtonTypeCustom];
-        _agreeBt.backgroundColor = [UIColor blueColor];
+        _agreeBt.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
         _agreeBt.layer.masksToBounds = YES;
         _agreeBt.layer.cornerRadius = 15;
+        [_agreeBt setTitle:@"同意" forState:UIControlStateNormal];
+        [_agreeBt.titleLabel setFont:[UIFont systemFontOfSize:font_14]];
+        [_agreeBt setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     }
     return _agreeBt;
 }
@@ -122,6 +142,9 @@
 - (void)customerUI
 {
     UIView *backView = [UIView new];
+    self.backView = backView;
+    backView.layer.masksToBounds = YES;
+    backView.layer.cornerRadius = 5;
     backView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:backView];
     [backView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -137,17 +160,22 @@
         make.top.equalTo(backView).offset(10);
     }];
     
-    UIImageView *phoneImg = [UIImageView new];
-    phoneImg.backgroundColor = [UIColor grayColor];
+    UIImageView *phoneImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"manage_detail_phone_default"]];
+    phoneImg.userInteractionEnabled = YES;
+    WeakSelf(self)
+    [phoneImg jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        NSMutableString *str = [[NSMutableString alloc] initWithFormat:@"tel:%@",weakself.roleAproveResponse.tenantPhone];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str] options:@{} completionHandler:nil];
+    }];
     [backView addSubview:phoneImg];
     [phoneImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(20);
+        make.width.height.equalTo(24);
         make.right.equalTo(backView).offset(-16);
         make.centerY.equalTo(self.nameLb);
     }];
     
     UIView *firstLine = [UIView new];
-    firstLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    firstLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [backView addSubview:firstLine];
     [firstLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(backView);
@@ -162,7 +190,9 @@
     }];
     
     UIView *describeBack = [UIView new];
-    describeBack.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    describeBack.layer.masksToBounds = YES;
+    describeBack.layer.cornerRadius = 2;
+    describeBack.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
     [backView addSubview:describeBack];
     [describeBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.projectLb.mas_bottom).offset(16);
@@ -191,7 +221,7 @@
     }];
     
     UIView *secondLine = [UIView new];
-    secondLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    secondLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [backView addSubview:secondLine];
     [secondLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.applyTimeLb.mas_bottom).offset(16);
@@ -200,21 +230,72 @@
     }];
     
     [backView addSubview:self.agreeBt];
+    [[self.agreeBt rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+        [weakself.subject sendNext:@"1"];
+    }];
     [_agreeBt mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(70);
+        make.width.equalTo(80);
         make.height.equalTo(30);
         make.bottom.equalTo(backView).offset(-10);
         make.right.equalTo(backView).offset(-16);
     }];
     
     [backView addSubview:self.refuseBt];
+    [[self.refuseBt rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+        if ([weakself.roleAproveResponse.status isEqualToString:@"APPROVING"] && [LoginInfoManage shareInstance].isBoss)
+        {
+            [weakself.subject sendNext:@"2"];
+        }
+    }];
     [_refuseBt mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(70);
+        make.width.equalTo(80);
         make.height.equalTo(30);
         make.bottom.equalTo(backView).offset(-10);
-        make.right.equalTo(self.agreeBt.mas_left).offset(-40);
+        make.right.equalTo(backView).offset(-116);
     }];
     
+}
+
+- (void)loadViewWithModel:(RoleApproveResponse *)model
+{
+    self.roleAproveResponse = model;
+    if ([LoginInfoManage shareInstance].isBoss)
+    {
+        self.nameLb.text = [NSString stringWithFormat:@"%@申请成为工地管理员",model.tenantName];
+    }
+    else
+    {
+        self.nameLb.text = [NSString stringWithFormat:@"%@申请成为%@的工地管理员",model.tenantName,model.bossName];
+    }
+    self.projectLb.text = [NSString stringWithFormat:@"申请项目:%@",model.projectName];
+    self.describeLb.text = [NSString stringWithFormat:@"附言:%@",model.descrip];
+    self.applyTimeLb.text = [NSString stringWithFormat:@"申请时间:%@",model.created];
+    self.fromLb.text = [NSString stringWithFormat:@"来源:%@",model.source];
+    if ([model.status isEqualToString:@"APPROVED"]) /// 已同意
+    {
+        self.agreeBt.hidden = YES;
+        [_refuseBt setTitle:@"已同意" forState:UIControlStateNormal];
+        [_refuseBt mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.backView).offset(-16);
+        }];
+    }
+    else if ([model.status isEqualToString:@"REJECT"]) /// 已拒绝
+    {
+        self.agreeBt.hidden = YES;
+        [_refuseBt setTitle:@"已拒绝" forState:UIControlStateNormal];
+        [_refuseBt mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.backView).offset(-16);
+        }];
+    }
+    else
+    {
+        self.agreeBt.hidden = ![LoginInfoManage shareInstance].isBoss;
+        [_refuseBt setTitle:[LoginInfoManage shareInstance].isBoss ? @"拒绝" : @"审核中" forState:UIControlStateNormal];
+        CGFloat right = [LoginInfoManage shareInstance].isBoss ? -116 : -16;
+        [_refuseBt mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.backView).offset(right);
+        }];
+    }
 }
 
 @end

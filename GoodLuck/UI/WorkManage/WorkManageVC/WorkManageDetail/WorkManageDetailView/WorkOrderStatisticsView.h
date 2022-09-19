@@ -7,9 +7,12 @@
 
 #import <UIKit/UIKit.h>
 #import "WorkOrderResponse.h"
+#import "TimeShowView.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface WorkOrderStatisticsView : UIView
+@property (nonatomic, strong) TimeShowView *timeShowView;
+@property (nonatomic, strong) NSString *projectId;
 - (void)loadOrderWithModel:(WorkOrderResponse *)response;
 @end
 

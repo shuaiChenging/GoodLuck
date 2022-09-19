@@ -11,7 +11,7 @@
 #import "WorkConfigManageResponse.h"
 @interface WorkConfigManageVC ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) WorkManageHeaderView *headerView;
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) GLTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *source;
 @property (nonatomic, assign) BOOL isEdit;
 @end
@@ -32,9 +32,10 @@
 {
     if (!_tableView)
     {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView = [[GLTableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerClass:WorkManageCell.class forCellReuseIdentifier:NSStringFromClass(WorkManageCell.class)];
     }
@@ -69,6 +70,7 @@
         if (success)
         {
             NSArray *array = [WorkConfigManageResponse mj_objectArrayWithKeyValuesArray:result[@"data"]];
+            weakself.tableView.emptyLb.hidden = array.count > 0;
             weakself.source = [Tools cutArry:2 array:array];
             [weakself.tableView reloadData];
         }

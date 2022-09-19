@@ -30,8 +30,8 @@
     if (!_titleLb)
     {
         _titleLb = [UILabel labelWithText:@"手机登录好运来"
-                                     font:[UIFont boldSystemFontOfSize:24]
-                                textColor:[UIColor blackColor]
+                                     font:[UIFont boldSystemFontOfSize:maxFont]
+                                textColor:[UIColor jk_colorWithHexString:COLOR_242424]
                                 alignment:NSTextAlignmentLeft];
     }
     return _titleLb;
@@ -42,8 +42,8 @@
     if (!_registLb)
     {
         _registLb = [UILabel labelWithText:@"用户注册"
-                                      font:[UIFont systemFontOfSize:16]
-                                 textColor:[UIColor blackColor]
+                                      font:[UIFont systemFontOfSize:font_16]
+                                 textColor:[UIColor jk_colorWithHexString:COLOR_242424]
                                  alignment:NSTextAlignmentLeft];
         _registLb.userInteractionEnabled = YES;
     }
@@ -55,8 +55,8 @@
     if (!_accountLoginLb)
     {
         _accountLoginLb = [UILabel labelWithText:@"账号密码登录"
-                                            font:[UIFont systemFontOfSize:16]
-                                       textColor:[UIColor blackColor]
+                                            font:[UIFont systemFontOfSize:font_16]
+                                       textColor:[UIColor jk_colorWithHexString:COLOR_242424]
                                        alignment:NSTextAlignmentLeft];
         _accountLoginLb.userInteractionEnabled = YES;
     }
@@ -68,8 +68,8 @@
     if (!_describeLb)
     {
         _describeLb = [UILabel labelWithText:@"验证即登录，未注册则自动创建新账号"
-                                        font:[UIFont systemFontOfSize:14]
-                                   textColor:[UIColor jk_colorWithHexString:@"#666666"]
+                                        font:[UIFont systemFontOfSize:font_14]
+                                   textColor:[UIColor jk_colorWithHexString:COLOR_8C8C8F]
                                    alignment:NSTextAlignmentLeft];
     }
     return _describeLb;
@@ -100,7 +100,7 @@
         _button = [DLButton new];
         [_button setTitle:@"登录" forState:UIControlStateNormal];
         _button.layer.cornerRadius = 20;
-        _button.backgroundColor = [UIColor blueColor];
+        _button.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
     }
     return _button;
 }

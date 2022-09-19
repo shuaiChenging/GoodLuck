@@ -27,7 +27,6 @@
     if (!_iconImage)
     {
         _iconImage = [UIImageView new];
-        _iconImage.backgroundColor = [UIColor grayColor];
     }
     return _iconImage;
 }
@@ -48,7 +47,7 @@
 {
     [self addSubview:self.iconImage];
     [_iconImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.equalTo(30);
+        make.width.height.equalTo(24);
         make.top.equalTo(self).offset(20);
         make.centerX.equalTo(self);
     }];

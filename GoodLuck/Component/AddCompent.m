@@ -8,7 +8,7 @@
 #import "AddCompent.h"
 @interface AddCompent ()
 @property (nonatomic, strong) UILabel *nameLb;
-@property (nonatomic, strong) UITextField *textField;
+@property (nonatomic, strong) GLTextField *textField;
 @property (nonatomic, copy) NSString *textStr;
 @end
 @implementation AddCompent
@@ -38,15 +38,14 @@
     return _nameLb;
 }
 
-- (UITextField *)textField
+- (GLTextField *)textField
 {
     if (!_textField)
     {
-        _textField = [UITextField new];
-        _textField.textColor = [UIColor jk_colorWithHexString:@"#666666"];
-        _textField.font = [UIFont systemFontOfSize:12];
+        _textField = [GLTextField new];
+        _textField.font = [UIFont systemFontOfSize:font_12];
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _textField.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _textField.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
     }
     return _textField;
 }
@@ -114,7 +113,7 @@
     
     UILabel *rightLb = [UILabel labelWithText:@"确认"
                                          font:[UIFont systemFontOfSize:14]
-                                    textColor:[UIColor blueColor]
+                                    textColor:[UIColor jk_colorWithHexString:COLOR_BLUE]
                                     alignment:NSTextAlignmentCenter];
     rightLb.userInteractionEnabled = YES;
     [rightLb jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
@@ -141,7 +140,7 @@
 {
     if (self.textField.text.length == 0)
     {
-        [Tools showToast:self.textStr];
+        [SVProgressHUD showImage:[UIImage imageNamed:@""] status:self.textStr];
     }
     [self.subject sendNext:self.textField.text];
     [self removeFromSuperview];
@@ -151,7 +150,7 @@
 {
     self.textStr = placeholder;
     self.nameLb.text = title;
-    self.textField.placeholder = placeholder;
+    [self.textField placeHolderString:placeholder];
 }
 
 @end

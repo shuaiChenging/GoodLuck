@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) DLTextFeild *passwordTF;
 @property (nonatomic, strong) DLButton *button;
 @property (nonatomic, strong) UILabel *phoneLoginLb;
+@property (nonatomic, strong) UILabel *regiestLb;
 @end
 
 NS_ASSUME_NONNULL_END

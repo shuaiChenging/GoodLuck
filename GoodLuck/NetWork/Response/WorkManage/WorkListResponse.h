@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *projectId;
 @property (nonatomic, copy) NSString *name;
 
+@property (nonatomic, copy) NSString *workType; /// NIGHT_WORK 晚班  OFF_WORK 未上班  DAY_WORK 白班
+
 @property (nonatomic, copy) NSString *finishCount;
 @property (nonatomic, copy) NSString *ztcCount;
 @property (nonatomic, copy) NSString *zdCount;
@@ -25,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *openTime;
 @property (nonatomic, copy) NSString *companyId;
 @property (nonatomic, copy) NSString *status;
+@property (nonatomic, copy) NSString *longitude;
+@property (nonatomic, copy) NSString *latitude;
 @end
 
 @interface WorkListResponse : BaseResponse

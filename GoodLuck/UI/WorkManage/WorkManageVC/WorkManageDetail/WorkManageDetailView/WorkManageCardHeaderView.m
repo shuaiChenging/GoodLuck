@@ -22,14 +22,21 @@
 @end
 @implementation WorkManageCardHeaderView
 
-- (instancetype)init
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super init];
+    self = [super initWithReuseIdentifier:reuseIdentifier];
     if (self)
     {
+        self.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
         [self customerUI];
     }
     return self;
+}
+
++ (instancetype)cellWithTableViewHeaderFooterView:(UITableView *)tableView
+{
+    WorkManageCardHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:NSStringFromClass(self)];
+    return headerView;
 }
 
 - (UILabel *)serialLeftLb
@@ -109,8 +116,8 @@
     if (!_timeLb)
     {
         _timeLb = [UILabel labelWithText:@"2022-06-18"
-                                    font:[UIFont boldSystemFontOfSize:13]
-                               textColor:[UIColor blueColor]
+                                    font:[UIFont boldSystemFontOfSize:font_14]
+                               textColor:[UIColor jk_colorWithHexString:COLOR_BLUE]
                                alignment:NSTextAlignmentLeft];
     }
     return _timeLb;
@@ -167,7 +174,7 @@
     UIView *circleView = [UIView new];
     circleView.layer.masksToBounds = YES;
     circleView.layer.cornerRadius = 5;
-    circleView.backgroundColor = [UIColor blueColor];
+    circleView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
     [backView addSubview:circleView];
     [circleView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.equalTo(10);
@@ -177,7 +184,7 @@
     
     [backView addSubview:self.timeLb];
     [_timeLb mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(circleView.mas_right).offset(16);
+        make.left.equalTo(circleView.mas_right).offset(10);
         make.centerY.equalTo(circleView);
     }];
     
@@ -200,6 +207,7 @@
     }];
     
     UIView *bottomBack = [UIView new];
+    bottomBack.backgroundColor = [UIColor jk_colorWithHexString:COLOR_FORM];
     [self addSubview:bottomBack];
     [bottomBack mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(16);
@@ -240,7 +248,7 @@
     }];
     
     UIView *middleView = [UIView new];
-    middleView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    middleView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [bottomBack addSubview:middleView];
     [middleView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(0.5);
@@ -264,8 +272,14 @@
         make.right.equalTo(rightView).offset(-16);
         make.centerY.equalTo(rightView);
     }];
-    
 }
 
+- (void)loadViewWithModel:(WorkDetailCardResponse *)model
+{
+    self.enterNumber.text = [NSString stringWithFormat:@"车队：%@",model.fleetCount];
+    self.outNumber.text = [NSString stringWithFormat:@"车辆：%@",model.carCount];
+    self.carNumber.text = [NSString stringWithFormat:@"工单数：%@",model.orderCount];
+    self.timeLb.text = model.key;
+}
 
 @end

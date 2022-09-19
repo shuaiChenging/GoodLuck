@@ -53,7 +53,7 @@
     }];
 
     UIView *bottomLine = [UIView new];
-    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [bottomView addSubview:bottomLine];
     [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.equalTo(bottomView);
@@ -61,10 +61,10 @@
     }];
 
     UIButton *button = [UIButton new];
-    [button.titleLabel setFont:[UIFont systemFontOfSize:16]];
+    [button.titleLabel setFont:[UIFont systemFontOfSize:font_15]];
     [button setTitle:@"发送申请" forState:UIControlStateNormal];
     button.layer.cornerRadius = 5;
-    button.backgroundColor = [UIColor blueColor];
+    button.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
     [bottomView addSubview:button];
     [button mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(bottomView).offset(16);
@@ -89,13 +89,13 @@
 {
     if (self.seletedRow == 1000)
     {
-        [Tools showToast:@"请选择项目"];
+        [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"请选择项目"];
         return;
     }
     NSString *describeStr = self.applyWorkPlaceHeaderView.contentInput.textField.text;
     if (describeStr.length == 0)
     {
-        [Tools showToast:@"请输入备注"];
+        [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"请输入备注"];
         return;
     }
     if (self.seletedRow < self.source.count)
@@ -107,6 +107,10 @@
             if (success)
             {
                 [weakself.subject sendNext:@"1"];
+                [SVProgressHUD showImage:[UIImage imageNamed:@""] status:@"已申请，请联系工地老板进行审批"];
+                [[RACScheduler mainThreadScheduler]afterDelay:1.0 schedule:^{
+                    [weakself.navigationController popViewControllerAnimated:YES];
+                }];
             }
             
         } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
@@ -134,7 +138,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.tableHeaderView = [self tableHeaderView];
-        _tableView.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+        _tableView.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         [_tableView registerClass:ApplyWorkPlaceCell.class forCellReuseIdentifier:NSStringFromClass(ApplyWorkPlaceCell.class)];
     }
@@ -145,6 +149,9 @@
 {
     WeakSelf(self)
     self.applyWorkPlaceHeaderView.frame = CGRectMake(0, 0, kScreenWidth, 146);
+    [self.applyWorkPlaceHeaderView.bossInput.rightImg jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
+        [weakself presentAddressBookVC];
+    }];
     [[self.applyWorkPlaceHeaderView.bossInput.textField rac_textSignal] subscribeNext:^(NSString * _Nullable x) {
         if (x.length > 11)
         {
@@ -185,6 +192,13 @@
                     [weakself.applyWorkPlaceHeaderView showBossName];
                 }
             }
+            else
+            {
+                weakself.isHidden = YES;
+                weakself.applyWorkPlaceHeaderView.frame = CGRectMake(0, 0, kScreenWidth, 146);
+                [weakself.applyWorkPlaceHeaderView hiddenBossName];
+                [weakself.tableView reloadData];
+            }
         }
         
     } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
@@ -203,6 +217,12 @@
             weakself.isHidden = NO;
             [weakself.tableView reloadData];
         }
+        else
+        {
+            weakself.source = [NSArray array];
+            weakself.isHidden = YES;
+            [weakself.tableView reloadData];
+        }
         
     } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
         
@@ -212,8 +232,11 @@
 - (void)presentAddressBookVC
 {
     AddressBookVC *addressBookVC = [AddressBookVC new];
+    WeakSelf(self)
     [addressBookVC.subject subscribeNext:^(id  _Nullable x) {
-        NSLog(@"%@",x);
+        weakself.applyWorkPlaceHeaderView.bossInput.textField.text = (NSString *)x;
+        [weakself getBossInfo:x];
+        [weakself getBossWorkPlaceList:x];
     }];
     BaseNavigationVC *addressNavi = [[BaseNavigationVC alloc] initWithRootViewController:addressBookVC];
     [self presentViewController:addressNavi animated:YES completion:nil];
@@ -235,7 +258,7 @@
     }];
     
     UIView *bottomLine = [UIView new];
-    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    bottomLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [headerView addSubview:bottomLine];
     [bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);

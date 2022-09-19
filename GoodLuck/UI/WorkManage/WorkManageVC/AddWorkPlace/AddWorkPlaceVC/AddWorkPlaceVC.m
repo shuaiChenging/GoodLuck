@@ -12,12 +12,18 @@
 #import "UnlitListVC.h"
 #import "CompanyListResponse.h"
 #import "WorkDetailResponse.h"
+#import "SearchAroundVC.h"
+#import <AMapSearchKit/AMapSearchKit.h>
 @interface AddWorkPlaceVC ()
 @property (nonatomic, strong) InfoSeletedCompent *companyAddress;
 @property (nonatomic, strong) CompanyListResponse *response;
 @property (nonatomic, strong) InfoInputRightCompent *projectName;
 @property (nonatomic, strong) InfoSeletedCompent *projectAddress;
 @property (nonatomic, strong) InfoInputCountCompent *detailAddress;
+@property (nonatomic, strong) AMapPOI *ampaPOI;
+@property (nonatomic, strong) NSString *projectId;
+@property (nonatomic, assign) CGFloat latitude;
+@property (nonatomic, assign) CGFloat longitude;
 @end
 
 @implementation AddWorkPlaceVC
@@ -25,8 +31,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    self.view.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BACK];
+    self.ampaPOI = [AMapPOI new];
+    self.response = [CompanyListResponse new];
     [self customerUI];
+}
+
+- (RACSubject *)subject
+{
+    if (!_subject)
+    {
+        _subject = [RACSubject new];
+    }
+    return _subject;
 }
 
 - (InfoInputCountCompent *)detailAddress
@@ -79,8 +96,8 @@
         make.left.right.equalTo(self.view);
     }];
     UILabel *baseLb = [UILabel labelWithText:@"基本配置（必填）"
-                                        font:[UIFont systemFontOfSize:16]
-                                   textColor:[UIColor jk_colorWithHexString:@"#666666"]
+                                        font:[UIFont systemFontOfSize:14]
+                                   textColor:[UIColor jk_colorWithHexString:@"#989898"]
                                    alignment:NSTextAlignmentLeft];
     [baseView addSubview:baseLb];
     [baseLb mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -96,7 +113,7 @@
     }];
     
     UIView *firstLine = [UIView new];
-    firstLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    firstLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.view addSubview:firstLine];
     [firstLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
@@ -106,7 +123,17 @@
     
     WeakSelf(self)
     [self.projectAddress jk_addTapActionWithBlock:^(UIGestureRecognizer *gestureRecoginzer) {
-        NSLog(@"来了，老弟");
+        SearchAroundVC *searchAroundVC = [SearchAroundVC new];
+        [searchAroundVC.subject subscribeNext:^(id  _Nullable x) {
+            weakself.ampaPOI = (AMapPOI *)x;
+            weakself.longitude = weakself.ampaPOI.location.longitude;
+            weakself.latitude = weakself.ampaPOI.location.latitude;
+            weakself.projectAddress.infoLb.text = [NSString stringWithFormat:@"%@%@%@",weakself.ampaPOI.province,weakself.ampaPOI.city,weakself.ampaPOI.district];
+            weakself.projectAddress.infoLb.textColor = [UIColor jk_colorWithHexString:COLOR_242424];
+            weakself.detailAddress.textField.text = weakself.ampaPOI.address;
+            weakself.detailAddress.numberLb.text = [NSString stringWithFormat:@"%lu/50",(unsigned long)weakself.ampaPOI.address.length];
+        }];
+        [weakself.navigationController pushViewController:searchAroundVC animated:YES];
     }];
     [self.view addSubview:self.projectAddress];
     [_projectAddress mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -116,7 +143,7 @@
     }];
     
     UIView *secondLine = [UIView new];
-    secondLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    secondLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.view addSubview:secondLine];
     [secondLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
@@ -132,7 +159,7 @@
     }];
     
     UIView *thirdLine = [UIView new];
-    thirdLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    thirdLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.view addSubview:thirdLine];
     [thirdLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
@@ -151,7 +178,7 @@
     }];
     
     UIView *fourthLine = [UIView new];
-    fourthLine.backgroundColor = [UIColor jk_colorWithHexString:@"#eeeeee"];
+    fourthLine.backgroundColor = [UIColor jk_colorWithHexString:COLOR_LINE];
     [self.view addSubview:fourthLine];
     [fourthLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.equalTo(0.5);
@@ -166,7 +193,7 @@
     [button.titleLabel setFont:[UIFont systemFontOfSize:16]];
     [button setTitle:@"保存" forState:UIControlStateNormal];
     button.layer.cornerRadius = 5;
-    button.backgroundColor = [UIColor blueColor];
+    button.backgroundColor = [UIColor jk_colorWithHexString:COLOR_BLUE];
     [self.view addSubview:button];
     [button mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view).offset(16);
@@ -178,18 +205,35 @@
 
 - (void)addWorkPlace
 {
-    PostRequest *request = [[PostRequest alloc] initWithRequestUrl:projectsave argument:@{@"address":@"江苏省",
-                                                                                          @"city":@"苏州市",
-                                                                                          @"companyId":@"district",
-                                                                                          @"district":@"district",
-                                                                                          @"latitude":@"district",
-                                                                                          @"name":@"district",
-                                                                                          @"province":@"district"}];
+    NSString *url = projectsave;
+    NSDictionary *dic = @{@"address":self.detailAddress.textField.text,
+                          @"city":self.ampaPOI.city,
+                     @"companyId":self.response.companyId,
+                      @"district":self.ampaPOI.district,
+                      @"latitude":@(self.latitude),
+                     @"longitude":@(self.longitude),
+                          @"name":self.projectName.textField.text,
+                      @"province":self.ampaPOI.province};
+    if (![Tools isEmpty:self.projectId])
+    {
+        url = projectedit;
+        dic = @{@"address":self.detailAddress.textField.text,
+                     @"id":self.projectId,
+                   @"city":self.ampaPOI.city,
+              @"companyId":self.response.companyId,
+               @"district":self.ampaPOI.district,
+               @"latitude":@(self.latitude),
+              @"longitude":@(self.longitude),
+                   @"name":self.projectName.textField.text,
+               @"province":self.ampaPOI.province};
+    }
+    PostRequest *request = [[PostRequest alloc] initWithRequestUrl:url argument:dic];
     WeakSelf(self)
     [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
         if (success)
         {
-            
+            [weakself.subject sendNext:@"1"];
+            [weakself.navigationController popViewControllerAnimated:YES];
         }
         
     } failure:^(__kindof Request * _Nonnull request, NSString * _Nonnull errorInfo) {
@@ -200,6 +244,7 @@
 - (void)loadViewWithProjectId:(NSString *)projectId
 {
     WeakSelf(self)
+    self.projectId = projectId;
     GetRequest *request = [[GetRequest alloc] initWithRequestUrl:projectdetails argument:@{@"id":projectId}];
     [request startWithCompletionBlockWithSuccess:^(__kindof Request * _Nonnull request, NSDictionary * _Nonnull result, BOOL success) {
         if (success)
@@ -218,7 +263,16 @@
     self.projectAddress.infoLb.text = [NSString stringWithFormat:@"%@%@%@",response.province,response.city,response.district];
     self.projectAddress.infoLb.textColor = [UIColor blackColor];
     
+    self.ampaPOI.city = response.city;
+    self.ampaPOI.district = response.district;
+    self.latitude = [response.latitude floatValue];
+    self.longitude = [response.longitude floatValue];
+    
+    self.ampaPOI.province = response.province;
+    self.response.companyId = response.companyId;
+    
     self.detailAddress.textField.text = response.address;
+    self.detailAddress.numberLb.text = [NSString stringWithFormat:@"%lu/50",(unsigned long)response.address.length];
     self.companyAddress.infoLb.text = response.companyName;
     self.companyAddress.infoLb.textColor = [UIColor blackColor];
 }
@@ -226,11 +280,12 @@
 - (void)showUnlitListVC
 {
     UnlitListVC *unlitListVC = [UnlitListVC new];
+    unlitListVC.companyId = self.response.companyId;
     WeakSelf(self)
     [unlitListVC.subject subscribeNext:^(id  _Nullable x) {
         weakself.response = (CompanyListResponse *)x;
         weakself.companyAddress.infoLb.text = weakself.response.name;
-        weakself.companyAddress.infoLb.textColor = [UIColor blackColor];
+        weakself.companyAddress.infoLb.textColor = [UIColor jk_colorWithHexString:COLOR_242424];
     }];
     [self presentViewController:unlitListVC animated:YES completion:nil];
 }
